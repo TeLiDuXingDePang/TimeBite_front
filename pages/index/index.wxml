@@ -159,8 +159,8 @@
     
     <!-- 快捷功能入口 -->
     <view class="quick-actions">
-      <view class="action-button action-primary">生成本周食谱</view>
-      <view class="action-button action-secondary">一键补货</view>
+      <view class="action-button action-primary" bindtap="generateWeeklyMenu">生成本周食谱</view>
+      <view class="action-button action-secondary" bindtap="oneClickReplenish">一键补货</view>
     </view>
   </view>
 </scroll-view>

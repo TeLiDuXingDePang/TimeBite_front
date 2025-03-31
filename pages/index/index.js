@@ -382,5 +382,29 @@ Page({
     // 刷新食材库存统计
     refreshIngredientStats: function () {
         this.fetchIngredientsStats();
+    },
+
+    // 生成本周食谱功能
+    generateWeeklyMenu: function () {
+        wx.showModal({
+            title: '功能开发中',
+            content: '生成本周食谱功能正在开发中，我们将尽快推出这项功能，帮助您更便捷地规划一周餐饮。',
+            confirmText: '我知道了',
+            confirmColor: '#07c160',
+            showCancel: false
+        });
+        console.log('用户点击了生成本周食谱按钮');
+    },
+
+    // 一键补货功能
+    oneClickReplenish: function () {
+        wx.showModal({
+            title: '即将上线',
+            content: '一键补货功能即将上线，该功能将帮助您根据当前库存自动生成购物清单，轻松补充所需食材。',
+            confirmText: '期待使用',
+            confirmColor: '#07c160',
+            showCancel: false
+        });
+        console.log('用户点击了一键补货按钮');
     }
 })

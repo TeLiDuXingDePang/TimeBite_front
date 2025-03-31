@@ -272,37 +272,25 @@ Page({
     },
 
     generateShoppingList: function () {
-        wx.showToast({
-            title: '购物清单生成中',
-            icon: 'loading',
-            duration: 1000,
-            success: () => {
-                setTimeout(() => {
-                    wx.showModal({
-                        title: '购物清单已生成',
-                        content: '已根据本周食谱计划生成购物清单，是否查看？',
-                        confirmText: '查看',
-                        cancelText: '稍后',
-                        success: (res) => {
-                            if (res.confirm) {
-                                // 跳转到购物清单页面
-                                wx.showToast({
-                                    title: '功能开发中',
-                                    icon: 'none'
-                                });
-                            }
-                        }
-                    });
-                }, 1000);
-            }
+        wx.showModal({
+            title: '功能开发中',
+            content: '生成购物清单功能正在开发中，该功能将根据您的膳食计划自动生成所需食材的购物清单，帮助您高效采购。',
+            confirmText: '我知道了',
+            confirmColor: '#07c160',
+            showCancel: false
         });
+        console.log('用户点击了生成购物清单按钮');
     },
 
     shareWeekPlan: function () {
-        wx.showShareMenu({
-            withShareTicket: true,
-            menus: ['shareAppMessage', 'shareTimeline']
+        wx.showModal({
+            title: '即将上线',
+            content: '分享食谱计划功能即将上线，该功能将允许您将精心规划的食谱计划分享给家人和朋友，一起享用健康美食。',
+            confirmText: '期待使用',
+            confirmColor: '#07c160',
+            showCancel: false
         });
+        console.log('用户点击了分享食谱计划按钮');
     },
 
     onShareAppMessage: function () {
