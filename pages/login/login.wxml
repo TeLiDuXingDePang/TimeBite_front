@@ -1,0 +1,89 @@
+<!-- 登录页面 -->
+<view class="login-container">
+  <!-- 顶部装饰 -->
+  <view class="header-decoration">
+    <view class="vegetable-pattern">
+      <text class="pattern-emoji large">🥦</text>
+      <text class="pattern-emoji medium">🥕</text>
+      <text class="pattern-emoji small">🍅</text>
+      <text class="pattern-emoji medium">🌽</text>
+      <text class="pattern-emoji large">🥬</text>
+      <text class="pattern-emoji small">🥒</text>
+      <text class="pattern-emoji medium">🫑</text>
+      <text class="pattern-emoji small">🧅</text>
+      <text class="pattern-emoji large">🍆</text>
+      <text class="pattern-emoji medium">🧄</text>
+    </view>
+  </view>
+
+  <!-- 主要内容区 -->
+  <view class="login-content">
+    <view class="welcome-text">
+      <text class="title">欢迎来到食光机</text>
+      <text class="subtitle">健康生活，从食材管理开始</text>
+    </view>
+
+    <!-- 头像选择区 -->
+    <view class="avatar-section">
+      <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+        <view class="avatar-container">
+          <view wx:if="{{!hasCustomAvatar}}" class="default-avatar">
+            <text class="default-avatar-emoji">🥦</text>
+          </view>
+          <image wx:else class="avatar" src="{{avatarUrl}}"></image>
+          <view class="avatar-badge">
+            <text class="badge-emoji">📷</text>
+          </view>
+        </view>
+        <text class="avatar-tip">点击更换头像</text>
+      </button>
+    </view>
+
+    <!-- 昵称输入区 -->
+    <view class="nickname-section">
+      <view class="input-container {{isFocused ? 'focused' : ''}}">
+        <view class="carrot-animation" wx:if="{{isFocused}}">
+          <text class="carrot-emoji">🥕</text>
+        </view>
+        <input 
+          type="nickname" 
+          class="nickname-input" 
+          placeholder="请输入您的昵称" 
+          placeholder-class="input-placeholder" 
+          bindinput="onInputNickname" 
+          bindfocus="onInputFocus"
+          bindblur="onInputBlur"
+          value="{{nickname}}"
+        />
+        <view class="counter-badge" wx:if="{{nickname.length > 0}}">
+          <text class="tomato-emoji">🍅</text>
+          <text class="counter-text">{{nickname.length}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部操作区 -->
+    <view class="bottom-action-area">
+      <!-- 登录按钮 -->
+      <view class="login-action">
+        <button 
+          class="login-btn {{canLogin ? '' : 'disabled'}}" 
+          bindtap="handleLogin" 
+          disabled="{{!canLogin}}"
+          hover-class="btn-hover"
+        >
+          <text class="pepper-emoji">🫑</text>
+          <text class="btn-text">开始使用</text>
+        </button>
+      </view>
+      
+      <!-- 私策提示 -->
+      <view class="privacy-tip">
+        <text>登录即表示您已阅读并同意</text>
+        <text class="link" bindtap="navigateToPrivacyPolicy">《隐私政策》</text>
+        <text>和</text>
+        <text class="link" bindtap="navigateToUserAgreement">《用户协议》</text>
+      </view>
+    </view>
+  </view>
+</view> 

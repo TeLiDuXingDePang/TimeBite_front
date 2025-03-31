@@ -1,0 +1,96 @@
+<!--about.wxml-->
+<view class="about-container">
+  <!-- 顶部App信息 -->
+  <view class="app-info">
+    <image class="app-logo" src="/assets/images/logo.svg" mode="aspectFit"></image>
+    <view class="app-name">食光机</view>
+    <view class="app-version">当前版本：0.0.0</view>
+  </view>
+
+  <!-- 功能介绍 -->
+  <view class="feature-section">
+    <view class="section-title">应用介绍</view>
+    <view class="feature-content">
+      <view class="feature-desc">
+        <text>食光机是您的智能食材管理与营养分析助手，帮助您追踪食物保质期、管理食材库存、分析营养摄入、规划健康饮食、减少食物浪费。</text>
+      </view>
+      <view class="feature-list">
+        <view class="feature-item">
+          <view class="feature-icon">📊</view>
+          <view class="feature-text">全面的营养分析与追踪</view>
+        </view>
+        <view class="feature-item">
+          <view class="feature-icon">📅</view>
+          <view class="feature-text">智能的食材保质期管理</view>
+        </view>
+        <view class="feature-item">
+          <view class="feature-icon">🍽️</view>
+          <view class="feature-text">个性化的膳食计划推荐</view>
+        </view>
+        <view class="feature-item">
+          <view class="feature-icon">👨‍👩‍👧‍👦</view>
+          <view class="feature-text">多人的家庭模式支持</view>
+        </view>
+        <view class="feature-item">
+          <view class="feature-icon">📱</view>
+          <view class="feature-text">简洁高效的用户界面</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 团队介绍 -->
+  <view class="team-section">
+    <view class="section-title">关于我们</view>
+    <view class="team-content">
+      <text class="team-desc">食光机团队由营养学专家、软件工程师和用户体验设计师组成，致力于通过科技手段帮助人们建立健康的饮食习惯，减少食物浪费，实现可持续发展。</text>
+      <view class="team-values">
+        <view class="value-item">
+          <view class="value-item-header">
+            <view class="value-icon">💡</view>
+            <view class="value-title">创新</view>
+          </view>
+          <view class="value-desc">运用前沿科技解决饮食健康问题</view>
+        </view>
+        <view class="value-item">
+          <view class="value-item-header">
+            <view class="value-icon">🔍</view>
+            <view class="value-title">专业</view>
+          </view>
+          <view class="value-desc">基于营养学科学研究的分析和建议</view>
+        </view>
+        <view class="value-item">
+          <view class="value-item-header">
+            <view class="value-icon">🤝</view>
+            <view class="value-title">责任</view>
+          </view>
+          <view class="value-desc">帮助用户和社会实现健康可持续发展</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 联系信息 -->
+  <view class="contact-section">
+    <view class="section-title">联系我们</view>
+    <view class="contact-list">
+      <view class="contact-item" bindtap="copyEmail">
+        <image class="contact-icon" src="/assets/icons/email.svg" mode="aspectFit"></image>
+        <text>3159268198@qq.com</text>
+      </view>
+      <!-- <view class="contact-item" bindtap="openWebsite">
+        <image class="contact-icon" src="/assets/icons/website.svg" mode="aspectFit"></image>
+        <text>www.shiguangji.com</text>
+      </view>
+      <view class="contact-item" bindtap="copyWechat">
+        <image class="contact-icon" src="/assets/icons/wechat.svg" mode="aspectFit"></image>
+        <text>食光机营养</text>
+      </view> -->
+    </view>
+  </view>
+
+  <!-- 版权信息 -->
+  <view class="copyright">
+    <text>Copyright © 2025 食光机团队 版权所有</text>
+  </view>
+</view> 

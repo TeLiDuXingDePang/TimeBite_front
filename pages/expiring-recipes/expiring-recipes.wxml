@@ -1,0 +1,136 @@
+<!-- 临期急救站页面 -->
+<view class="expiring-container">
+  <!-- 顶部食材展示 -->
+  <view class="expiring-header">
+    <view class="header-title">临期食材急救站</view>
+    <view class="header-subtitle">为您推荐使用临期食材的创意菜谱</view>
+    
+    <!-- 加载状态 -->
+    <view class="loading-container" wx:if="{{isLoading}}">
+      <view class="loading-spinner"></view>
+      <view class="loading-text">加载临期食材中...</view>
+    </view>
+    
+    <!-- 错误状态 -->
+    <view class="error-container" wx:elif="{{loadError}}">
+      <image class="error-icon" src="/images/icons/error.svg" mode="aspectFit"></image>
+      <view class="error-text">加载失败，请返回首页重试</view>
+      <view class="error-action" bindtap="goBack">返回</view>
+    </view>
+    
+    <!-- 无数据状态 -->
+    <view class="empty-container" wx:elif="{{!expiringIngredients || expiringIngredients.length === 0}}">
+      <image class="empty-icon" src="/images/icons/empty.svg" mode="aspectFit"></image>
+      <view class="empty-text">暂无临期食材</view>
+      <view class="empty-action" bindtap="goBack">返回首页</view>
+    </view>
+    
+    <!-- 临期食材列表 -->
+    <view class="ingredients-list" wx:elif="{{expiringIngredients && expiringIngredients.length > 0}}">
+      <view class="ingredient-item" wx:for="{{expiringIngredients}}" wx:key="id">
+        <image class="ingredient-image" src="{{item.image}}" mode="aspectFill" binderror="handleImageError" data-index="{{index}}"></image>
+        <view class="ingredient-info">
+          <view class="ingredient-name">{{item.name}}</view>
+          <view class="ingredient-expiry">{{item.quantity}}{{item.unit}} · {{item.expiryDays}}天后过期</view>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 紧急度分级 -->
+  <view class="urgency-levels" wx:if="{{expiringIngredients && expiringIngredients.length > 0}}">
+    <view class="urgency-item" wx:for="{{urgencyLevels}}" wx:key="level">
+      <view class="urgency-dot urgency-{{item.level}}"></view>
+      <view class="urgency-label">{{item.label}}</view>
+    </view>
+  </view>
+  
+  <!-- 创意菜谱推荐 -->
+  <block wx:if="{{expiringIngredients && expiringIngredients.length > 0}}">
+    <view class="recipes-title">创意菜谱推荐</view>
+    
+    <!-- 菜谱加载状态 -->
+    <view class="loading-container" wx:if="{{isLoadingRecipes}}">
+      <view class="loading-spinner"></view>
+      <view class="loading-text">加载匹配菜谱中...</view>
+    </view>
+    
+    <!-- 菜谱错误状态 -->
+    <view class="error-container" wx:elif="{{loadErrorRecipes}}">
+      <image class="error-icon" src="/images/icons/error.svg" mode="aspectFit"></image>
+      <view class="error-text">加载菜谱失败，请重试</view>
+      <view class="error-action" bindtap="refreshRecipes">重试</view>
+    </view>
+    
+    <!-- 无匹配菜谱状态 -->
+    <view class="empty-container" wx:elif="{{!recipes || recipes.length === 0}}">
+      <image class="empty-icon" src="/images/icons/empty.svg" mode="aspectFit"></image>
+      <view class="empty-text">暂无匹配菜谱推荐</view>
+      <view class="empty-text-sub">试试更新你的食材库存</view>
+    </view>
+    
+    <!-- 菜谱列表 -->
+    <view class="recipes-container" wx:elif="{{recipes && recipes.length > 0}}">
+      <view class="recipe-card" wx:for="{{recipes}}" wx:key="id" bindtap="viewRecipeDetail" data-id="{{item.id}}">
+        <view class="recipe-urgency urgency-{{item.urgency}}"></view>
+        <image class="recipe-image" src="{{item.image}}" mode="aspectFill" binderror="handleRecipeImageError" data-index="{{index}}"></image>
+        <view class="recipe-info">
+          <view class="recipe-name">{{item.name}}</view>
+          
+          <!-- 信息区域改为两部分布局 -->
+          <view class="recipe-meta-container">
+            <!-- 左侧：时间和卡路里信息 -->
+            <view class="recipe-meta">
+              <view class="recipe-time">
+                <image class="meta-icon" src="/assets/icons/time.svg" mode="aspectFit"></image>
+                {{item.cookTime}}分钟
+              </view>
+              <view class="recipe-calories" wx:if="{{item.calories}}">
+                <image class="meta-icon" src="/assets/icons/calories.svg" mode="aspectFit"></image>
+                {{item.calories}}千卡
+              </view>
+            </view>
+            
+            <!-- 右侧：匹配度 -->
+            <view class="recipe-match-rate {{item.matchClass}}" wx:if="{{item.matchRate}}">
+              <image class="meta-icon" src="/assets/icons/match.svg" mode="aspectFit"></image>
+              <text>匹配度</text>
+              <text class="match-value">{{item.matchRate}}%</text>
+            </view>
+          </view>
+          
+          <!-- 食材标签 -->
+          <view class="recipe-ingredients-container">
+            <view class="ingredients-title">匹配食材</view>
+            <view class="recipe-ingredients">
+              <view class="ingredient-tag" wx:for="{{item.ingredients}}" wx:for-item="ingredient" wx:key="*this">
+                <text>{{ingredient}}</text>
+              </view>
+            </view>
+          </view>
+          
+          <!-- 菜谱标签 -->
+          <view class="recipe-tags-container" wx:if="{{item.tags && item.tags.length > 0}}">
+            <view class="tags-title">标签</view>
+            <view class="recipe-tags">
+              <view class="recipe-tag" wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this">
+                <text>{{tag}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+        
+        <!-- 智能替换提示 -->
+        <view class="recipe-tip" wx:if="{{item.tip}}">
+          <image class="tip-icon" src="/assets/icons/tip.svg"></image>
+          <text class="tip-text">{{item.tip}}</text>
+        </view>
+      </view>
+    </view>
+  </block>
+  
+  <!-- 底部操作区 -->
+  <view class="bottom-actions">
+    <view class="action-button" bindtap="goBack">返回首页</view>
+  </view>
+</view> 

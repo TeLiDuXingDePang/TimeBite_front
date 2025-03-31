@@ -1,0 +1,145 @@
+<!--推送偏好设置页面-->
+<view class="preference-page">
+  <!-- 主内容区 -->
+  <view class="preference-content">
+    <!-- 通知总开关 -->
+    <view class="main-switch-panel">
+      <view class="main-switch-info">
+        <view class="main-switch-title">接收推送通知</view>
+        <view class="main-switch-desc">关闭后将不会收到任何推送信息</view>
+      </view>
+      <switch checked="{{mainSwitch}}" bindchange="toggleMainSwitch" color="#4CAF50" class="main-switch"></switch>
+    </view>
+    
+    <block wx:if="{{mainSwitch}}">
+      <!-- 分类标题：通知类型 -->
+      <view class="category-header">
+        <text class="category-title">通知类型设置</text>
+      </view>
+      
+      <!-- 食材相关通知卡片 -->
+      <view class="setting-card">
+        <view class="setting-category">食材相关</view>
+        
+        <!-- 单项设置 -->
+        <view class="setting-item">
+          <view class="setting-info">
+            <view class="setting-name">临期食材提醒</view>
+            <view class="setting-desc">食材即将过期时提醒您</view>
+          </view>
+          <switch checked="{{notifications.expiryReminder}}" bindchange="toggleNotification" data-type="expiryReminder" color="#4CAF50"></switch>
+        </view>
+        
+        <view class="setting-item">
+          <view class="setting-info">
+            <view class="setting-name">库存不足提醒</view>
+            <view class="setting-desc">常用食材库存不足时提醒</view>
+          </view>
+          <switch checked="{{notifications.lowStock}}" bindchange="toggleNotification" data-type="lowStock" color="#4CAF50"></switch>
+        </view>
+        
+        <view class="setting-item no-border">
+          <view class="setting-info">
+            <view class="setting-name">食谱推荐</view>
+            <view class="setting-desc">基于库存智能推荐食谱</view>
+          </view>
+          <switch checked="{{notifications.recipeRecommend}}" bindchange="toggleNotification" data-type="recipeRecommend" color="#4CAF50"></switch>
+        </view>
+      </view>
+      
+      <!-- 计划相关通知卡片 -->
+      <view class="setting-card">
+        <view class="setting-category">计划相关</view>
+        
+        <view class="setting-item">
+          <view class="setting-info">
+            <view class="setting-name">每日餐食提醒</view>
+            <view class="setting-desc">按时提醒您今日餐食计划</view>
+          </view>
+          <switch checked="{{notifications.mealReminder}}" bindchange="toggleNotification" data-type="mealReminder" color="#4CAF50"></switch>
+        </view>
+        
+        <view class="setting-item no-border">
+          <view class="setting-info">
+            <view class="setting-name">购物清单提醒</view>
+            <view class="setting-desc">自动生成和提醒购物清单</view>
+          </view>
+          <switch checked="{{notifications.shoppingList}}" bindchange="toggleNotification" data-type="shoppingList" color="#4CAF50"></switch>
+        </view>
+      </view>
+      
+      <!-- 营养相关通知卡片 -->
+      <view class="setting-card">
+        <view class="setting-category">营养相关</view>
+        
+        <view class="setting-item">
+          <view class="setting-info">
+            <view class="setting-name">营养素摄入报告</view>
+            <view class="setting-desc">每日营养素摄入情况总结</view>
+          </view>
+          <switch checked="{{notifications.nutritionReport}}" bindchange="toggleNotification" data-type="nutritionReport" color="#4CAF50"></switch>
+        </view>
+        
+        <view class="setting-item no-border">
+          <view class="setting-info">
+            <view class="setting-name">营养目标提醒</view>
+            <view class="setting-desc">营养素摄入未达标时提醒</view>
+          </view>
+          <switch checked="{{notifications.nutritionGoal}}" bindchange="toggleNotification" data-type="nutritionGoal" color="#4CAF50"></switch>
+        </view>
+      </view>
+      
+      <!-- 系统消息卡片 -->
+      <view class="setting-card">
+        <view class="setting-category">系统消息</view>
+        
+        <view class="setting-item">
+          <view class="setting-info">
+            <view class="setting-name">系统更新</view>
+            <view class="setting-desc">有新版本或功能更新时通知</view>
+          </view>
+          <switch checked="{{notifications.systemUpdate}}" bindchange="toggleNotification" data-type="systemUpdate" color="#4CAF50"></switch>
+        </view>
+        
+        <view class="setting-item no-border">
+          <view class="setting-info">
+            <view class="setting-name">活动与优惠</view>
+            <view class="setting-desc">接收促销活动和会员优惠</view>
+          </view>
+          <switch checked="{{notifications.promotions}}" bindchange="toggleNotification" data-type="promotions" color="#4CAF50"></switch>
+        </view>
+      </view>
+      
+      <!-- 分类标题：时间设置 -->
+      <view class="category-header">
+        <text class="category-title">免打扰时间设置</text>
+      </view>
+      
+      <!-- 免打扰时间卡片 -->
+      <view class="setting-card time-card">
+        <view class="time-setting">
+          <view class="time-setting-label">免打扰时间段</view>
+          <view class="time-picker-wrapper">
+            <picker mode="time" value="{{quietTimeStart}}" start="00:00" end="23:59" bindchange="onQuietTimeStartChange" class="time-select">
+              <view class="time-value">{{quietTimeStart}}</view>
+            </picker>
+            <text class="time-divider">至</text>
+            <picker mode="time" value="{{quietTimeEnd}}" start="00:00" end="23:59" bindchange="onQuietTimeEndChange" class="time-select">
+              <view class="time-value">{{quietTimeEnd}}</view>
+            </picker>
+          </view>
+        </view>
+        
+        <view class="time-hint">
+          <text class="hint-text">在免打扰时间内，系统不会向您发送推送通知。紧急提醒（如食材过期）除外。</text>
+        </view>
+      </view>
+    </block>
+    
+    <!-- 底部操作区 -->
+    <view class="action-area">
+      <button class="btn-save" bindtap="saveSettings">保存设置</button>
+      <view class="btn-reset" bindtap="resetToDefault">恢复默认设置</view>
+    </view>
+  </view>
+</view> 

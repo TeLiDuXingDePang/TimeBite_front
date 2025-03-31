@@ -1,0 +1,236 @@
+<!--scan.wxml-->
+<view class="container">
+  <!-- 拍摄界面 -->
+  <view class="camera-section {{isCameraActive ? 'active' : ''}}">
+    <!-- 相机激活状态 -->
+    <camera wx:if="{{isCameraActive}}" device-position="back" flash="auto" class="camera" binderror="cameraError"></camera>
+    
+    <!-- 显示拍摄的图片 -->
+    <view wx:elif="{{captureTempImage}}" class="capture-preview">
+      <image class="capture-image" src="{{captureTempImage}}" mode="aspectFill"></image>
+    </view>
+    
+    <!-- 默认状态 -->
+    <view wx:else class="camera-placeholder">
+      <image class="placeholder-image" src="/assets/icons/camera-placeholder.svg" mode="aspectFit"></image>
+      <view class="placeholder-text">点击下方按钮启动相机</view>
+      <view class="placeholder-subtext">识别您的食材，获取智能推荐</view>
+    </view>
+    
+    <!-- 相机控制按钮 -->
+    <view class="camera-controls">
+      <!-- 有拍摄图片时显示重拍按钮 -->
+      <block wx:if="{{captureTempImage}}">
+        <view class="control-button secondary" bindtap="retakePhoto">
+          <view class="control-icon-wrapper">
+            <image class="control-icon-image" src="/assets/icons/refresh.svg" mode="aspectFit"></image>
+          </view>
+          <text class="control-text">重新拍摄</text>
+        </view>
+        
+        <view class="control-button invisible">
+          <view class="control-icon-wrapper"></view>
+          <text class="control-text"></text>
+        </view>
+        
+        <view class="control-button secondary" bindtap="chooseImage">
+          <view class="control-icon-wrapper">
+            <image class="control-icon-image" src="/assets/icons/gallery.svg" mode="aspectFit"></image>
+          </view>
+          <text class="control-text">相册选择</text>
+        </view>
+      </block>
+      
+      <!-- 相机激活或默认状态下的按钮 -->
+      <block wx:else>
+        <view class="control-button secondary" bindtap="chooseImage">
+          <view class="control-icon-wrapper">
+            <image class="control-icon-image" src="/assets/icons/gallery.svg" mode="aspectFit"></image>
+          </view>
+          <text class="control-text">相册选择</text>
+        </view>
+        
+        <view class="control-button {{isCameraActive ? 'capture' : 'primary'}}" bindtap="{{isCameraActive ? 'takePhoto' : 'toggleCamera'}}">
+          <view class="control-icon-wrapper {{isCameraActive ? 'capture-icon' : ''}}">
+            <image class="control-icon-image" src="{{isCameraActive ? '/assets/icons/capture.svg' : '/assets/icons/camera.svg'}}" mode="aspectFit"></image>
+          </view>
+          <text class="control-text">{{isCameraActive ? '拍照识别' : '启动相机'}}</text>
+        </view>
+        
+        <view wx:if="{{isCameraActive}}" class="control-button secondary" bindtap="toggleCamera">
+          <view class="control-icon-wrapper">
+            <image class="control-icon-image" src="/assets/icons/close.svg" mode="aspectFit"></image>
+          </view>
+          <text class="control-text">关闭相机</text>
+        </view>
+        <view wx:else class="control-button secondary invisible">
+          <view class="control-icon-wrapper">
+            <image class="control-icon-image" src="/assets/icons/close.svg" mode="aspectFit"></image>
+          </view>
+          <text class="control-text">占位按钮</text>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 菜谱即时推荐 -->
+  <view class="recipe-recommendation" wx:if="{{recognizedFoods.length > 0}}">
+    <view class="recommendation-title">这些食材可以做什么？</view>
+    <scroll-view class="recommendation-scroll" scroll-x="true">
+      <view class="recommendation-card" wx:for="{{recommendedRecipes}}" wx:key="id" bindtap="viewRecipe" data-id="{{item.id}}">
+        <image class="recommendation-image" src="{{item.image}}" mode="aspectFill"></image>
+        <view class="recommendation-name">{{item.name}}</view>
+        <view class="recommendation-match {{item.matchRate >= 90 ? 'match-high' : (item.matchRate >= 70 ? 'match-medium' : 'match-low')}}">
+          匹配度 {{item.matchRate}}%
+        </view>
+        <view wx:if="{{item.id.startsWith('api-')}}" class="recipe-ai-tag">AI推荐</view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 食材列表主体 -->
+  <view class="food-list-section" wx:if="{{recognizedFoods.length > 0}}">
+    <view class="section-header">
+      <view class="section-title">已识别食材</view>
+      <view class="section-subtitle">共 {{recognizedFoods.length}} 种</view>
+    </view>
+
+    <view class="food-list">
+      <view class="food-item" wx:for="{{recognizedFoods}}" wx:key="id">
+        <!-- 卡片头部 -->
+        <view class="food-card-header">
+          <view class="food-emoji-container">
+            <text class="food-emoji-large">{{item.emoji || '🍽️'}}</text>
+          </view>
+          <view class="food-info">
+            <view class="food-name">{{item.name}}</view>
+            <view wx:if="{{item.confidence}}" class="food-confidence">识别置信度: {{item.confidence}}</view>
+          </view>
+          <view class="food-action" bindtap="removeFood" data-id="{{item.id}}">
+            <text class="action-icon">✕</text>
+          </view>
+        </view>
+        
+        <!-- 卡片内容 -->
+        <view class="food-item-body">
+          <!-- 趣味知识部分 -->
+          <view wx:if="{{item.funFact}}" class="food-fun-fact">
+            <image class="fun-fact-icon" src="/assets/icons/fun_fact.svg" mode="aspectFit"></image>
+            <view class="fun-fact-text">{{item.funFact}}</view>
+          </view>
+          
+          <!-- 健康提示 -->
+          <view wx:if="{{item.healthNote}}" class="food-health-note">
+            <image class="note-icon" src="/assets/icons/health_note.svg" mode="aspectFit"></image>
+            <view class="note-text">{{item.healthNote}}</view>
+          </view>
+          
+          <!-- 烹饪小贴士 -->
+          <view wx:if="{{item.tip}}" class="food-cooking-tip">
+            <image class="tip-icon" src="/assets/icons/tip.svg" mode="aspectFit"></image>
+            <view class="tip-text">{{item.tip}}</view>
+          </view>
+          
+          <!-- 数量和保质期设置 -->
+          <view class="food-properties">
+            <!-- 将数量和保质期设置放在同一行 -->
+            <view class="food-properties-row">
+              <!-- 数量设置 -->
+              <view class="food-property">
+                <view class="property-header">
+                  <view class="property-label">数量</view>
+                </view>
+                <view class="property-input-group">
+                  <input class="property-input" type="digit" value="{{item.quantity}}" placeholder="数量" bindinput="updateQuantity" data-id="{{item.id}}" />
+                  <picker class="unit-picker" bindchange="changeUnit" data-id="{{item.id}}" value="{{item.unitIndex}}" range="{{unitOptions}}">
+                    <view class="picker-text">{{unitOptions[item.unitIndex]}}</view>
+                  </picker>
+                </view>
+              </view>
+              
+              <!-- 保质期设置 -->
+              <view class="food-property">
+                <view class="property-header">
+                  <view class="property-label">保质期</view>
+                  <view class="expiry-date">{{item.expiryDate}}</view>
+                </view>
+                <view class="property-slider-group">
+                  <slider class="expiry-slider" min="1" max="30" value="{{item.expiryDays}}" show-value block-size="12" block-color="#4CAF50" activeColor="#4CAF50" bindchange="updateExpiry" data-id="{{item.id}}"></slider>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 手动添加食材 -->
+    <view class="add-food-section">
+      <view class="add-food-button" bindtap="showAddFoodModal">
+        <text class="add-icon">+</text>
+        <text>手动添加食材</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部操作按钮 -->
+  <view class="bottom-actions" wx:if="{{recognizedFoods.length > 0}}">
+    <view class="action-button secondary" bindtap="viewRecipesOnly">保存菜谱</view>
+    <view class="action-button primary" bindtap="saveToInventory">录入食材库</view>
+  </view>
+
+  <!-- 空状态提示 -->
+  <view class="empty-state" wx:if="{{!isCameraActive && !captureTempImage && recognizedFoods.length === 0 && !isAnalyzing && !analyzeError}}">
+    <view class="empty-text">开始拍照识别食材</view>
+    <view class="empty-subtext">智能识别食材，给出推荐菜谱，智能录入库存</view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="empty-state" wx:if="{{isAnalyzing}}">
+    <view class="loading-spinner"></view>
+    <view class="empty-text">正在分析食材...</view>
+    <view class="empty-subtext">AI正在识别图片中的食材，请稍候</view>
+  </view>
+
+  <!-- 识别失败状态 -->
+  <view class="empty-state" wx:if="{{!isCameraActive && analyzeError}}">
+    <image class="error-icon" src="/images/icons/error.svg" mode="aspectFit"></image>
+    <view class="empty-text">识别失败</view>
+    <view class="empty-subtext">请确保图片清晰且包含食材，再次尝试</view>
+    <view class="retry-button" bindtap="retakePhoto">重新拍照</view>
+  </view>
+
+  <!-- 手动添加食材弹窗 -->
+  <view class="modal" wx:if="{{showAddModal}}">
+    <view class="modal-content">
+      <view class="modal-header">
+        <view class="modal-title">添加食材</view>
+        <view class="modal-close" bindtap="hideAddFoodModal">✕</view>
+      </view>
+      <view class="modal-body">
+        <view class="input-group">
+          <view class="input-label">食材名称</view>
+          <input class="modal-input" placeholder="请输入食材名称" value="{{newFood.name}}" bindinput="updateNewFood" data-field="name" />
+        </view>
+        <view class="input-group">
+          <view class="input-label">数量</view>
+          <view class="input-row">
+            <input class="modal-input quantity" type="digit" placeholder="数量" value="{{newFood.quantity}}" bindinput="updateNewFood" data-field="quantity" />
+            <picker class="modal-picker" bindchange="updateNewFood" data-field="unitIndex" value="{{newFood.unitIndex}}" range="{{unitOptions}}">
+              <view class="picker-text">{{unitOptions[newFood.unitIndex]}}</view>
+            </picker>
+          </view>
+        </view>
+        <view class="input-group">
+          <view class="input-label">保质期 (天)</view>
+          <slider class="modal-slider" min="1" max="30" value="{{newFood.expiryDays}}" show-value block-size="12" block-color="#4CAF50" activeColor="#4CAF50" bindchange="updateNewFood" data-field="expiryDays"></slider>
+          <view class="expiry-date">{{newFood.expiryDate}}</view>
+        </view>
+      </view>
+      <view class="modal-footer">
+        <view class="modal-button cancel" bindtap="hideAddFoodModal">取消</view>
+        <view class="modal-button confirm" bindtap="addNewFood">确认</view>
+      </view>
+    </view>
+  </view>
+</view>

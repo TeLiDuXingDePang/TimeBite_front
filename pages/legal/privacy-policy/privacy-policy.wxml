@@ -1,0 +1,77 @@
+<!--privacy-policy.wxml-->
+<view class="legal-container">
+  <view class="content">
+    <view class="section">
+      <view class="section-title">引言</view>
+      <view class="section-content">
+        <text>食光机团队（以下简称"我们"）非常重视用户的隐私和个人信息保护。本隐私政策详细说明了我们如何收集、使用、存储和保护您的个人信息，以及您享有的相关权利。请您在使用我们的服务前，仔细阅读并了解本隐私政策的全部内容。</text>
+      </view>
+    </view>
+    
+    <view class="section">
+      <view class="section-title">我们收集的信息</view>
+      <view class="section-content">
+        <text>1. 您主动提供的信息：当您注册账户、设置个人健康档案、录入食材信息时，我们会收集您提供的相关信息。</text>
+        <text>2. 设备信息：我们可能会收集您的设备型号、操作系统版本、唯一设备标识符等信息。</text>
+        <text>3. 使用信息：我们会收集您使用我们服务的信息，包括您访问的页面、功能的使用频率、崩溃数据等。</text>
+        <text>4. 位置信息：在您授权的情况下，我们可能会收集您的位置信息，以提供基于位置的服务。</text>
+      </view>
+    </view>
+    
+    <view class="section">
+      <view class="section-title">信息的使用</view>
+      <view class="section-content">
+        <text>我们使用收集的信息主要用于：</text>
+        <text>1. 提供、维护和改进我们的服务。</text>
+        <text>2. 个性化您的体验，包括提供定制的食谱推荐和营养建议。</text>
+        <text>3. 处理您的支付和交易。</text>
+        <text>4. 向您发送服务通知、更新和促销信息。</text>
+        <text>5. 分析使用模式以改进我们的服务。</text>
+      </view>
+    </view>
+    
+    <view class="section">
+      <view class="section-title">信息的共享</view>
+      <view class="section-content">
+        <text>我们不会出售您的个人信息。在以下有限情况下，我们可能会共享您的信息：</text>
+        <text>1. 在获得您明确同意的情况下。</text>
+        <text>2. 与我们的服务提供商共享，他们代表我们执行服务，并受到保密义务的约束。</text>
+        <text>3. 在法律要求下，或为了保护我们的权利和安全。</text>
+      </view>
+    </view>
+    
+    <view class="section">
+      <view class="section-title">信息的保护</view>
+      <view class="section-content">
+        <text>我们采取多种安全措施来保护您的个人信息，包括加密传输、安全存储和访问控制等。但请注意，互联网传输不可能完全安全，我们无法保证信息传输的绝对安全。</text>
+      </view>
+    </view>
+    
+    <view class="section">
+      <view class="section-title">您的权利</view>
+      <view class="section-content">
+        <text>您有权：</text>
+        <text>1. 访问、更正或删除您的个人信息。</text>
+        <text>2. 限制或反对我们处理您的个人信息。</text>
+        <text>3. 数据可携带性：获取您提供给我们的信息的副本。</text>
+        <text>4. 撤回同意：您可以随时撤回您之前给予的同意。</text>
+      </view>
+    </view>
+    
+    <view class="section">
+      <view class="section-title">政策更新</view>
+      <view class="section-content">
+        <text>我们可能会不时更新本隐私政策，更新后的政策将在应用内发布。继续使用我们的服务，即表示您接受修订后的政策。</text>
+      </view>
+    </view>
+    
+    <view class="section">
+      <view class="section-title">联系我们</view>
+      <view class="section-content">
+        <text>如果您对本隐私政策有任何疑问或建议，请通过以下方式联系我们：</text>
+        <text>邮箱：3159268198@qq.com</text>
+        <text>客服热线：15347602198</text>
+      </view>
+    </view>
+  </view>
+</view> 

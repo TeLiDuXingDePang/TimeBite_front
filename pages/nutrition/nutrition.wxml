@@ -1,0 +1,142 @@
+<!--nutrition.wxml-->
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="container">
+    <!-- 主标题和日期 -->
+    <view class="header-container">
+      <view class="main-title">营养报告</view>
+      <view class="date-display">{{currentDate}}</view>
+    </view>
+    
+    <!-- 时间范围选择器 -->
+    <view class="time-range-selector">
+      <view class="range-tab {{selectedRange === 'day' ? 'active' : ''}}" bindtap="switchRange" data-range="day">今日</view>
+      <view class="range-tab {{selectedRange === 'week' ? 'active' : ''}}" bindtap="switchRange" data-range="week">本周</view>
+      <view class="range-tab {{selectedRange === 'month' ? 'active' : ''}}" bindtap="switchRange" data-range="month">本月</view>
+    </view>
+    
+    <!-- 营养摄入概览 -->
+    <view class="section-header">
+      <view class="section-title">营养摄入概览</view>
+      <view class="section-subtitle">{{rangeTitleMap[selectedRange]}}摄入情况</view>
+    </view>
+    
+    <!-- 图表水平滚动区域 -->
+    <view class="charts-scroll-container">
+      <scroll-view class="charts-scroll-view" 
+                  scroll-x="true" 
+                  enhanced="true" 
+                  show-scrollbar="false"
+                  bindscroll="onChartScroll">
+        <view class="charts-scroll-content">
+          <!-- 环形图：蛋白质/脂肪/碳水比例 -->
+          <view class="chart-container">
+            <view class="chart-card">
+              <view class="chart-title">三大营养素比例</view>
+              <view class="chart-wrapper">
+                <ec-canvas id="pieChart" canvas-id="pieChart" ec="{{ pieEc }}" force-use-old-canvas="true"></ec-canvas>
+              </view>
+              <view class="chart-legend">
+                <view class="legend-item">
+                  <view class="legend-color protein"></view>
+                  <view class="legend-text">蛋白质 {{nutritionData.protein}}g</view>
+                </view>
+                <view class="legend-item">
+                  <view class="legend-color fat"></view>
+                  <view class="legend-text">脂肪 {{nutritionData.fat}}g</view>
+                </view>
+                <view class="legend-item">
+                  <view class="legend-color carbs"></view>
+                  <view class="legend-text">碳水 {{nutritionData.carbs}}g</view>
+                </view>
+              </view>
+            </view>
+          </view>
+          
+          <!-- 折线图：热量摄入趋势 -->
+          <view class="chart-container">
+            <view class="chart-card">
+              <view class="chart-title">热量摄入趋势</view>
+              <view class="chart-wrapper">
+                <ec-canvas id="lineChart" canvas-id="lineChart" ec="{{ lineEc }}" force-use-old-canvas="true"></ec-canvas>
+              </view>
+              <view class="chart-summary">
+                <view class="summary-item">
+                  <view class="summary-value">{{nutritionData.averageCalories}}</view>
+                  <view class="summary-label">平均热量(千卡)</view>
+                </view>
+                <view class="summary-item">
+                  <view class="summary-value {{nutritionData.caloriesStatus === 'normal' ? 'normal' : 'warning'}}">{{nutritionData.caloriesStatus === 'normal' ? '达标' : '未达标'}}</view>
+                  <view class="summary-label">目标状态</view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+      
+      <!-- 滚动提示 -->
+      <view class="scroll-hint">
+        <image class="hint-icon" src="/assets/icons/swipe.svg" mode="aspectFit"></image>
+        <text>左右滑动查看更多图表</text>
+      </view>
+    </view>
+    
+    <!-- 营养素详情 -->
+    <view class="section-header">
+      <view class="section-title">营养素详情</view>
+      <view class="section-subtitle">点击查看详细来源</view>
+    </view>
+    
+    <view class="nutrition-details">
+      <view class="details-grid">
+        <view class="detail-card" wx:for="{{nutritionDetails}}" wx:key="name" bindtap="showNutritionSource" data-name="{{item.name}}">
+          <view class="detail-header">
+            <view class="detail-name">{{item.name}}</view>
+            <view class="detail-value" style="color: {{item.color}}">{{item.value}}{{item.unit}}</view>
+          </view>
+          <view class="detail-progress-container">
+            <view class="detail-progress" style="width: {{item.percentage}}%; background: linear-gradient(90deg, {{item.color}}99, {{item.color}}33);"></view>
+          </view>
+          <view class="detail-footer">
+            <view class="detail-target">目标: {{item.target}}{{item.unit}}</view>
+            <view class="detail-percentage" style="color: {{item.color}}">{{item.percentage}}%</view>
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 营养建议 -->
+    <view class="section-header">
+      <view class="section-title">营养建议</view>
+      <view class="section-subtitle">基于您的饮食习惯</view>
+    </view>
+    
+    <view class="nutrition-advice">
+      <view class="advice-card" wx:for="{{nutritionAdvice}}" wx:key="id">
+        <view class="advice-icon">{{item.icon}}</view>
+        <view class="advice-content">
+          <view class="advice-title">{{item.title}}</view>
+          <view class="advice-text">{{item.content}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</scroll-view>
+
+<!-- 营养素来源弹窗 -->
+<view class="source-modal {{showSourceModal ? 'show' : ''}}" bindtap="hideSourceModal">
+  <view class="modal-content" catchtap="stopPropagation">
+    <view class="modal-header">
+      <view class="modal-title">{{currentNutrition.name}} 来源分析</view>
+      <view class="modal-close" bindtap="hideSourceModal">×</view>
+    </view>
+    <view class="modal-body">
+      <view class="source-list">
+        <view class="source-item" wx:for="{{currentNutrition.sources}}" wx:key="food">
+          <view class="source-percentage">{{item.percentage}}%</view>
+          <view class="source-name">{{item.food}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

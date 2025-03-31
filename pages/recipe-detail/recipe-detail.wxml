@@ -1,0 +1,186 @@
+<!-- 菜谱详情页 -->
+<view class="recipe-detail-container">
+  <!-- 加载状态 -->
+  <view class="loading-container" wx:if="{{isLoading}}">
+    <view class="loading-spinner"></view>
+    <view class="loading-text">加载菜谱详情中...</view>
+  </view>
+  
+  <!-- 错误状态 -->
+  <view class="error-container" wx:elif="{{loadError}}">
+    <image class="error-icon" src="/images/icons/error.svg" mode="aspectFit"></image>
+    <view class="error-text">加载菜谱详情失败</view>
+    <view class="error-action" bindtap="goBack">返回</view>
+  </view>
+  
+  <!-- 菜谱内容 - 仅在加载成功且有数据时显示 -->
+  <block wx:elif="{{recipe}}">
+    <!-- 封面图 -->
+    <image class="recipe-cover" src="{{recipe.image}}" mode="aspectFill"></image>
+    
+    <!-- 菜谱标题和基本信息 -->
+    <view class="recipe-header">
+      <view class="recipe-title">{{recipe.name}}</view>
+      <view class="recipe-brief">{{recipe.brief || '一道美味又营养的家常菜，简单易做'}}</view>
+      
+      <!-- 菜谱标签 -->
+      <view class="recipe-tags" wx:if="{{recipe.tags && recipe.tags.length > 0}}">
+        <view class="tag" wx:for="{{recipe.tags}}" wx:key="*this">{{item}}</view>
+      </view>
+    </view>
+    
+    <!-- 分类导航栏 -->
+    <view class="recipe-nav">
+      <view class="nav-item {{currentTab === 'ingredients' ? 'active' : ''}}" bindtap="switchTab" data-tab="ingredients">
+        <text>食材</text>
+      </view>
+      <view class="nav-item {{currentTab === 'tools' ? 'active' : ''}}" bindtap="switchTab" data-tab="tools">
+        <text>工具</text>
+      </view>
+      <view class="nav-item {{currentTab === 'preparation' ? 'active' : ''}}" bindtap="switchTab" data-tab="preparation">
+        <text>预处理</text>
+      </view>
+      <view class="nav-item {{currentTab === 'steps' ? 'active' : ''}}" bindtap="switchTab" data-tab="steps">
+        <text>步骤</text>
+      </view>
+      <view class="nav-item {{currentTab === 'tips' ? 'active' : ''}}" bindtap="switchTab" data-tab="tips">
+        <text>小贴士</text>
+      </view>
+    </view>
+    
+    <!-- 内容区域 -->
+    <view class="recipe-content">
+      <!-- 食材清单 -->
+      <view class="content-section" wx:if="{{currentTab === 'ingredients'}}">
+        <view class="section-header">
+          <view class="section-title">食材清单</view>
+          <view class="section-action" bindtap="copyIngredients">一键复制</view>
+        </view>
+        
+        <view class="ingredients-list">
+          <view class="ingredient-group">
+            <view class="group-title">主料</view>
+            <view class="ingredient-item" wx:for="{{recipe.mainIngredients}}" wx:key="name">
+              <view class="ingredient-name">{{item.name}}</view>
+              <view class="ingredient-amount">{{item.amount}}</view>
+              <view class="ingredient-status {{item.status}}">{{item.statusText}}</view>
+            </view>
+          </view>
+          
+          <view class="ingredient-group" wx:if="{{recipe.accessories && recipe.accessories.length > 0}}">
+            <view class="group-title">辅料</view>
+            <view class="ingredient-item" wx:for="{{recipe.accessories}}" wx:key="name">
+              <view class="ingredient-name">{{item.name}}</view>
+              <view class="ingredient-amount">{{item.amount}}</view>
+              <view class="ingredient-status {{item.status}}">{{item.statusText}}</view>
+            </view>
+          </view>
+          
+          <view class="ingredient-group" wx:if="{{recipe.seasonings && recipe.seasonings.length > 0}}">
+            <view class="group-title">调料</view>
+            <view class="ingredient-item" wx:for="{{recipe.seasonings}}" wx:key="name">
+              <view class="ingredient-name">{{item.name}}</view>
+              <view class="ingredient-amount">{{item.amount}}</view>
+              <view class="ingredient-status {{item.status}}">{{item.statusText}}</view>
+            </view>
+          </view>
+        </view>
+        
+        <view class="missing-ingredients" wx:if="{{missingIngredients && missingIngredients.length > 0}}">
+          <view class="missing-title">缺少的食材</view>
+          <view class="missing-list">
+            <view class="missing-item" wx:for="{{missingIngredients}}" wx:key="name">
+              <text>{{item.name}} {{item.amount}}</text>
+              <view class="add-to-cart" catchtap="addToCart" data-item="{{item}}">加入购物清单</view>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 工具准备 -->
+      <view class="content-section" wx:if="{{currentTab === 'tools'}}">
+        <view class="section-header">
+          <view class="section-title">工具准备</view>
+        </view>
+        
+        <view class="tools-list" wx:if="{{recipe.tools && recipe.tools.length > 0}}">
+          <view class="tool-item" wx:for="{{recipe.tools}}" wx:key="name">
+            <view class="tool-emoji">{{item.emoji || '🍳'}}</view>
+            <view class="tool-info">
+              <view class="tool-name">{{item.name}}</view>
+              <view class="tool-alternative" wx:if="{{item.alternative}}">替代方案：{{item.alternative}}</view>
+            </view>
+          </view>
+        </view>
+        
+        <!-- 无工具提示 -->
+        <view class="empty-tips" wx:else>
+          <text>无需特殊工具，使用常见厨房用具即可</text>
+        </view>
+      </view>
+      
+      <!-- 预处理指南 -->
+      <view class="content-section" wx:if="{{currentTab === 'preparation'}}">
+        <view class="section-header">
+          <view class="section-title">预处理指南</view>
+        </view>
+        
+        <view class="preparation-list" wx:if="{{recipe.preparations && recipe.preparations.length > 0}}">
+          <view class="preparation-item" wx:for="{{recipe.preparations}}" wx:key="index">
+            <view class="preparation-step">{{index + 1}}</view>
+            <view class="preparation-content">
+              <view class="preparation-text">{{item.text}}</view>
+              <image wx:if="{{item.image}}" class="preparation-image" src="{{item.image}}" mode="aspectFill"></image>
+            </view>
+          </view>
+        </view>
+        
+        <!-- 无预处理步骤提示 -->
+        <view class="empty-tips" wx:else>
+          <text>无需特殊预处理，可直接开始烹饪步骤</text>
+        </view>
+      </view>
+      
+      <!-- 烹饪步骤 -->
+      <view class="content-section" wx:if="{{currentTab === 'steps'}}">
+        <view class="section-header">
+          <view class="section-title">烹饪步骤</view>
+        </view>
+        
+        <view class="steps-list" wx:if="{{recipe.steps && recipe.steps.length > 0}}">
+          <view class="step-item" wx:for="{{recipe.steps}}" wx:key="index">
+            <view class="step-number">{{index + 1}}</view>
+            <view class="step-content">
+              <view class="step-text">{{item.text}}</view>
+              <image wx:if="{{item.image}}" class="step-image" src="{{item.image}}" mode="aspectFill"></image>
+            </view>
+          </view>
+        </view>
+        
+        <!-- 无步骤提示 -->
+        <view class="empty-tips" wx:else>
+          <text>暂无详细烹饪步骤</text>
+        </view>
+      </view>
+      
+      <!-- 烹饪小贴士 -->
+      <view class="content-section" wx:if="{{currentTab === 'tips'}}">
+        <view class="section-header">
+          <view class="section-title">烹饪小贴士</view>
+        </view>
+        
+        <view class="tips-list" wx:if="{{recipe.tips && recipe.tips.length > 0}}">
+          <view class="tip-item" wx:for="{{recipe.tips}}" wx:key="index">
+            <image class="tip-icon" src="/assets/icons/tip.svg"></image>
+            <view class="tip-text">{{item}}</view>
+          </view>
+        </view>
+        
+        <!-- 无小贴士提示 -->
+        <view class="empty-tips" wx:else>
+          <text>暂无烹饪小贴士</text>
+        </view>
+      </view>
+    </view>
+  </block>
+</view> 

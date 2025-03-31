@@ -1,0 +1,7 @@
+{
+    "navigationBarTitleText": "登录 - 食光机",
+    "navigationBarBackgroundColor": "#4CAF50",
+    "navigationBarTextStyle": "white",
+    "disableScroll": true,
+    "usingComponents": {}
+}

@@ -1,0 +1,98 @@
+<!--家庭模式页面-->
+<view class="family-container">
+  <!-- 成员列表 -->
+  <view class="members-container">
+    <section-header title="家庭成员" subtitle="点击切换不同成员，一键应用对应饮食方案"></section-header>
+
+    <view class="members-list">
+      <view class="member-card {{item.isActive ? 'active' : ''}}" 
+            wx:for="{{familyMembers}}" 
+            wx:key="id" 
+            bindtap="switchMember" 
+            data-id="{{item.id}}">
+        <view class="member-avatar-container">
+          <image class="member-avatar" src="{{item.avatar}}" mode="aspectFill"></image>
+          <view class="active-indicator" wx:if="{{item.isActive}}">
+            <image class="check-icon" src="/assets/icons/check.png"></image>
+          </view>
+        </view>
+        <view class="member-info">
+          <view class="member-name">{{item.name}}</view>
+          <view class="member-role">{{item.role}}</view>
+          <view class="member-details">{{item.details}}</view>
+        </view>
+      </view>
+
+      <!-- 添加新成员按钮 -->
+      <view class="add-member-card" bindtap="showAddMember">
+        <view class="add-icon">+</view>
+        <view class="add-text">添加新成员</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 当前成员设置 -->
+  <view class="active-member-settings">
+    <section-header title="成员特定设置"></section-header>
+
+    <view class="settings-list">
+      <view class="setting-item" bindtap="navigateToNutritionSettings">
+        <image class="setting-icon" src="/assets/icons/nutrition.png"></image>
+        <view class="setting-content">
+          <view class="setting-title">营养元素目标</view>
+          <view class="setting-desc">设置个性化营养摄入目标</view>
+        </view>
+        <image class="arrow-icon" src="/assets/icons/arrow-right.svg"></image>
+      </view>
+
+      <view class="setting-item" bindtap="navigateToDietaryRestrictions">
+        <image class="setting-icon" src="/assets/icons/restriction.png"></image>
+        <view class="setting-content">
+          <view class="setting-title">饮食禁忌</view>
+          <view class="setting-desc">管理过敏源或宗教饮食规则</view>
+        </view>
+        <image class="arrow-icon" src="/assets/icons/arrow-right.svg"></image>
+      </view>
+    </view>
+  </view>
+
+  <!-- 营养冲突提示 -->
+  <view class="conflict-alert" wx:if="{{false}}">
+    <image class="alert-icon" src="/assets/icons/warning.png"></image>
+    <view class="alert-content">
+      <view class="alert-title">当前菜谱中发现营养冲突</view>
+      <view class="alert-desc">周一晚餐的三文鱼料理与孩子的海鲜过敏冲突</view>
+    </view>
+    <view class="alert-action">处理</view>
+  </view>
+</view>
+
+<!-- 添加成员模态框 -->
+<view class="modal {{showAddMemberModal ? 'show' : ''}}" catchtouchmove="preventTouchMove">
+  <view class="modal-content" catchtap="stopPropagation">
+    <view class="modal-header">
+      <view class="modal-title">添加新成员</view>
+      <view class="modal-close" bindtap="closeAddMember">×</view>
+    </view>
+    <form bindsubmit="addNewMember">
+      <view class="modal-body">
+        <view class="form-item">
+          <view class="form-label">成员名称</view>
+          <input class="form-input" name="name" placeholder="请输入成员名称" />
+        </view>
+        <view class="form-item">
+          <view class="form-label">饮食角色</view>
+          <input class="form-input" name="role" placeholder="如：儿童/孕妇/健身" />
+        </view>
+        <view class="form-item">
+          <view class="form-label">饮食特点(选填)</view>
+          <input class="form-input" name="details" placeholder="如：低盐/高蛋白" />
+        </view>
+      </view>
+      <view class="modal-footer">
+        <button class="cancel-btn" bindtap="closeAddMember">取消</button>
+        <button class="confirm-btn" form-type="submit">确认</button>
+      </view>
+    </form>
+  </view>
+</view> 

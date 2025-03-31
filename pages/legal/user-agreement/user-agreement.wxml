@@ -1,0 +1,86 @@
+<!--user-agreement.wxml-->
+<view class="legal-container">
+  <view class="content">
+    <view class="section">
+      <view class="section-title">引言</view>
+      <view class="section-content">
+        <text>欢迎您使用食光机应用！本用户协议（以下简称"协议"）是您与食光机团队之间关于使用食光机应用及服务的法律协议。请您在使用我们的服务前，仔细阅读并了解本协议的全部内容。</text>
+        <text>通过使用我们的服务，您确认您已阅读、理解并同意接受本协议的全部条款，包括我们可能随时发布的对本协议的任何修改。如果您不同意本协议的任何条款，请停止使用我们的服务。</text>
+      </view>
+    </view>
+    
+    <view class="section">
+      <view class="section-title">账户注册与安全</view>
+      <view class="section-content">
+        <text>1. 您在注册账户时必须提供真实、准确、完整的信息，并在信息变更时及时更新。</text>
+        <text>2. 您需要妥善保管账户信息和登录密码，任何通过您的账户进行的操作将视为您本人的行为。</text>
+        <text>3. 如发现任何未经授权使用您账户的情况，请立即通知我们。</text>
+      </view>
+    </view>
+    
+    <view class="section">
+      <view class="section-title">用户权利与义务</view>
+      <view class="section-content">
+        <text>1. 您有权根据本协议约定使用食光机提供的各项服务。</text>
+        <text>2. 您在使用我们服务时，必须遵守中华人民共和国相关法律法规及所有国际法律、国家法律。</text>
+        <text>3. 您不得利用我们的服务从事任何违法或不当的活动，包括但不限于：</text>
+        <text>   a) 发布、传播违法、有害、骚扰、诽谤、淫秽或其他不当内容；</text>
+        <text>   b) 侵犯他人知识产权或其他合法权益；</text>
+        <text>   c) 干扰或破坏服务的正常运行；</text>
+        <text>   d) 收集其他用户的个人信息，或以任何形式骚扰其他用户。</text>
+      </view>
+    </view>
+    
+    <view class="section">
+      <view class="section-title">服务的提供与修改</view>
+      <view class="section-content">
+        <text>1. 我们保留随时修改、中断或终止服务的权利，且无需对您或任何第三方负责。</text>
+        <text>2. 我们可能会不时更新应用或改变服务内容，以提供新功能、改进用户体验或出于其他合理原因。</text>
+        <text>3. 我们保留在必要时限制服务使用量或服务特性的权利。</text>
+      </view>
+    </view>
+    
+    <view class="section">
+      <view class="section-title">知识产权</view>
+      <view class="section-content">
+        <text>1. 食光机应用及其内容（包括但不限于文本、图片、视频、商标、标志、版面设计、程序等）均受著作权法、商标法及其他法律保护。</text>
+        <text>2. 未经我们明确书面许可，您不得以任何方式复制、修改、传播或使用我们的任何内容。</text>
+        <text>3. 您通过我们服务上传、发布的内容，您保留其知识产权，但授予我们全球性、免费、非独占、可转让的许可，允许我们使用、复制、修改、发布和展示此类内容。</text>
+      </view>
+    </view>
+    
+    <view class="section">
+      <view class="section-title">免责声明</view>
+      <view class="section-content">
+        <text>1. 我们的服务按"现状"和"可用"的基础提供，我们不保证服务不会中断或无错误。</text>
+        <text>2. 我们不对服务中提供的任何营养建议或食谱推荐的准确性、有效性或适用性作任何保证。使用此类信息的风险由您自行承担。</text>
+        <text>3. 如您有任何健康问题，请在遵循我们的任何营养建议前咨询专业医生或营养师。</text>
+        <text>4. 在法律允许的最大范围内，我们对因使用或无法使用我们的服务而导致的任何直接、间接、附带、特殊或后果性损害不承担责任。</text>
+      </view>
+    </view>
+    
+    <view class="section">
+      <view class="section-title">协议修改</view>
+      <view class="section-content">
+        <text>我们可能会不时修改本协议。当协议发生重大变更时，我们会在应用内显著位置提供通知。您继续使用我们的服务，即表示您接受修订后的协议。</text>
+      </view>
+    </view>
+    
+    <view class="section">
+      <view class="section-title">法律适用与争议解决</view>
+      <view class="section-content">
+        <text>1. 本协议的订立、执行和解释及争议的解决均适用于中华人民共和国法律。</text>
+        <text>2. 如发生与本协议相关的任何争议，双方应友好协商解决；协商不成的，任何一方均有权将争议提交至本公司所在地有管辖权的人民法院诉讼解决。</text>
+      </view>
+    </view>
+    
+    <view class="section">
+      <view class="section-title">联系我们</view>
+      <view class="section-content">
+        <text>如果您对本协议有任何疑问或建议，请通过以下方式联系我们：</text>
+        <text>邮箱：3159268198@qq.com</text>
+        <text>客服热线：15347602198</text>
+      </view>
+    </view>
+  </view>
+</view> 

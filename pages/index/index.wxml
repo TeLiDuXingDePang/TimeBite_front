@@ -1,0 +1,166 @@
+<!--index.wxml-->
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="container">
+    <!-- 主标题和日期 -->
+    <view class="header-container">
+      <view class="main-title">今天吃什么？</view>
+      <view class="date-display">{{currentDate}}</view>
+    </view>
+    
+    <!-- 智能提示横幅 -->
+    <block wx:if="{{isLoadingExpiring}}">
+      <!-- 加载状态 -->
+      <view class="alert-banner alert-loading">
+        <image class="alert-icon" src="/images/icons/loading.svg" mode="aspectFit"></image>
+        <view class="alert-text">正在检查食材状态...</view>
+      </view>
+    </block>
+    <block wx:elif="{{hasExpiringIngredient}}">
+      <!-- 有临期食材的状态 -->
+      <view class="alert-banner" bindtap="navigateToExpiringRecipes">
+        <image class="alert-icon" src="/assets/icons/warning.svg" mode="aspectFit"></image>
+        <view class="alert-text">{{expiringIngredient.quantity}}{{expiringIngredient.unit}}{{expiringIngredient.name}}将在{{expiringIngredient.days_until_expiry}}天后过期</view>
+        <view class="alert-action" catchtap="navigateToExpiringRecipes">查看</view>
+      </view>
+    </block>
+    <block wx:else>
+      <!-- 没有临期食材的状态 -->
+      <view class="alert-banner alert-good">
+        <image class="alert-icon" src="/assets/icons/check.svg" mode="aspectFit"></image>
+        <view class="alert-text">很好！目前没有临期食材</view>
+      </view>
+    </block>
+    
+    <!-- 今日推荐菜谱 -->
+    <view class="section-header">
+      <view class="section-title">今日推荐菜谱</view>
+      <view class="section-subtitle">根据库存智能匹配</view>
+      <view class="section-action" catchtap="refreshRecipes">
+        <image class="refresh-icon" src="/images/icons/refresh.svg" mode="aspectFit"></image>
+      </view>
+    </view>
+    <view class="recipe-scroll-container">
+      <!-- 加载状态 -->
+      <view class="loading-container" wx:if="{{isLoading}}">
+        <view class="loading-spinner"></view>
+        <view class="loading-text">加载推荐菜谱中...</view>
+      </view>
+      
+      <!-- 错误状态 -->
+      <view class="error-container" wx:elif="{{loadError}}">
+        <image class="error-icon" src="/images/icons/error.svg" mode="aspectFit"></image>
+        <view class="error-text">加载失败，请点击刷新</view>
+        <view class="error-action" bindtap="refreshRecipes">刷新</view>
+      </view>
+      
+      <!-- 菜谱列表 -->
+      <scroll-view class="recipe-scroll" scroll-x="true" enhanced="true" show-scrollbar="false" wx:elif="{{recipes && recipes.length > 0}}">
+        <view class="recipe-card" wx:for="{{recipes}}" wx:key="id" bindtap="navigateToRecipeDetail" data-recipe="{{item}}">
+          <image class="recipe-image" src="{{item.image}}" mode="aspectFill"></image>
+          <view class="recipe-info">
+            <!-- 菜谱名称（最多显示两行） -->
+            <view class="recipe-name">{{item.name}}</view>
+            
+            <!-- 元数据区域 -->
+            <view class="recipe-meta">
+              <view class="meta-item">
+                <view class="meta-value">{{item.matchRate}}%</view>
+                <view class="meta-label">匹配度</view>
+              </view>
+              <view class="meta-item">
+                <view class="meta-value">{{item.cookTime}}分钟</view>
+                <view class="meta-label">制作时间</view>
+              </view>
+              <view class="meta-item">
+                <view class="meta-value">{{item.calories}}</view>
+                <view class="meta-label">千卡</view>
+              </view>
+            </view>
+            
+            <!-- 标签区域 -->
+            <view class="recipe-tags">
+              <block wx:if="{{item.tags && item.tags.length > 0}}">
+                <view class="tag tag-{{tag.type}}" wx:for="{{item.tags}}" wx:for-item="tag" wx:key="text">{{tag.text}}</view>
+              </block>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+      
+      <!-- 暂无数据状态 -->
+      <view class="empty-container" wx:else>
+        <image class="empty-icon" src="/images/icons/empty.svg" mode="aspectFit"></image>
+        <view class="empty-text">暂无推荐菜谱</view>
+        <view class="empty-action" bindtap="refreshRecipes">刷新</view>
+      </view>
+      
+      <view class="scroll-hint" wx:if="{{recipes && recipes.length > 1}}">
+        <image class="hint-icon" src="/images/icons/swipe.svg" mode="aspectFit"></image>
+        <text>左滑查看更多菜谱</text>
+      </view>
+    </view>
+    
+    <!-- 食材库存看板 -->
+    <view class="section-header">
+      <view class="section-title">食材库存</view>
+      <view class="section-subtitle">实时更新</view>
+      <view class="section-action" catchtap="refreshIngredientStats">
+        <image class="refresh-icon" src="/images/icons/refresh.svg" mode="aspectFit"></image>
+      </view>
+    </view>
+    <view class="inventory-board">
+      <!-- 加载状态 -->
+      <block wx:if="{{ingredientsStats.isLoading}}">
+        <view class="inventory-loading">
+          <view class="loading-spinner"></view>
+          <view class="loading-text">加载中...</view>
+        </view>
+      </block>
+      
+      <!-- 错误状态 -->
+      <block wx:elif="{{ingredientsStats.loadError}}">
+        <view class="inventory-error">
+          <view class="error-text">加载失败，请点击刷新</view>
+          <view class="error-action" bindtap="refreshIngredientStats">刷新</view>
+        </view>
+      </block>
+      
+      <!-- 正常显示状态 -->
+      <block wx:else>
+        <view class="inventory-header">
+          <view class="inventory-stats">共 <text class="stats-highlight">{{ingredientsStats.total_count}}</text> 种食材</view>
+          <view class="inventory-action" catchtap="navigateToInventory" hover-class="inventory-action-hover" hover-stay-time="100">
+            <text>管理库存</text>
+          </view>
+        </view>
+        
+        <view class="inventory-summary">
+          <view class="summary-item">
+            <view class="summary-count">{{ingredientsStats.fresh_count}}</view>
+            <view class="summary-label">新鲜食材</view>
+          </view>
+          <view class="summary-divider"></view>
+          <view class="summary-item">
+            <view class="summary-count warning">{{ingredientsStats.expiring_count}}</view>
+            <view class="summary-label">临期食材</view>
+          </view>
+          <view class="summary-divider"></view>
+          <view class="summary-item">
+            <view class="summary-count danger">{{ingredientsStats.expired_count}}</view>
+            <view class="summary-label">过期食材</view>
+          </view>
+        </view>
+        
+        <view class="inventory-footer">
+          <view class="inventory-tip">点击"管理库存"查看详细信息</view>
+        </view>
+      </block>
+    </view>
+    
+    <!-- 快捷功能入口 -->
+    <view class="quick-actions">
+      <view class="action-button action-primary">生成本周食谱</view>
+      <view class="action-button action-secondary">一键补货</view>
+    </view>
+  </view>
+</scroll-view>

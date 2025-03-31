@@ -1,0 +1,130 @@
+<!--nutrition-elements-target.wxml-->
+<scroll-view scroll-y class="page-scroll">
+  <view class="container">
+    <section-header title="营养元素目标" subtitle="设置个人每日营养元素摄入目标"></section-header>
+
+    <!-- 导航标签 -->
+    <view class="nav-tabs">
+      <view class="tab {{activeTab === 'macro' ? 'active' : ''}}" bindtap="switchTab" data-tab="macro">三大营养素</view>
+      <view class="tab {{activeTab === 'vitamins' ? 'active' : ''}}" bindtap="switchTab" data-tab="vitamins">维生素</view>
+      <view class="tab {{activeTab === 'minerals' ? 'active' : ''}}" bindtap="switchTab" data-tab="minerals">矿物质</view>
+    </view>
+
+    <!-- 三大营养素设置 -->
+    <view class="tab-content" hidden="{{activeTab !== 'macro'}}">
+      <view class="macro-grid-container">
+        <view class="macro-grid-item" wx:for="{{macroItems}}" wx:key="key">
+          <view class="nutrition-header">
+            <view class="nutrition-info">
+              <view class="nutrition-name">{{item.name}}</view>
+              <view class="nutrition-desc">{{item.desc}}</view>
+            </view>
+            <view class="nutrition-value">{{macroTargets[item.key].value}}{{macroTargets[item.key].unit}}</view>
+          </view>
+          <view class="macro-slider-container">
+            <slider 
+              min="{{macroTargets[item.key].min}}" 
+              max="{{macroTargets[item.key].max}}" 
+              step="{{macroTargets[item.key].step}}" 
+              value="{{macroTargets[item.key].value}}" 
+              activeColor="{{item.color}}" 
+              block-size="20" 
+              bindchange="onMacroChange"
+              data-type="{{item.key}}"
+            />
+            <view class="range-labels">
+              <text>{{macroTargets[item.key].min}}{{macroTargets[item.key].unit}}</text>
+              <text>{{macroTargets[item.key].max}}{{macroTargets[item.key].unit}}</text>
+            </view>
+          </view>
+          <view class="macro-recommendation">
+            推荐：{{macroTargets[item.key].recommended}}{{macroTargets[item.key].unit}}
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 维生素设置 -->
+    <view class="tab-content" hidden="{{activeTab !== 'vitamins'}}">
+      <view class="grid-container">
+        <view class="grid-item" wx:for="{{vitaminTargets}}" wx:key="id">
+          <view class="grid-item-content" bindtap="editVitaminTarget" data-id="{{item.id}}">
+            <view class="item-name">{{item.name}}</view>
+            <view class="item-value">{{item.value}}{{item.unit}}</view>
+            <view class="item-status-container">
+              <view class="item-status {{item.status}}">{{item.statusText}}</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 矿物质设置 -->
+    <view class="tab-content" hidden="{{activeTab !== 'minerals'}}">
+      <view class="grid-container">
+        <view class="grid-item" wx:for="{{mineralTargets}}" wx:key="id">
+          <view class="grid-item-content" bindtap="editMineralTarget" data-id="{{item.id}}">
+            <view class="item-name">{{item.name}}</view>
+            <view class="item-value">{{item.value}}{{item.unit}}</view>
+            <view class="item-status-container">
+              <view class="item-status {{item.status}}">{{item.statusText}}</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部信息和保存按钮 -->
+    <view class="info-box">
+      <view class="info-text">根据中国营养学会膳食指南推荐值设置</view>
+      <view class="info-hint">可根据个人情况调整</view>
+    </view>
+
+    <view class="button-container">
+      <button class="reset-button" bindtap="resetToRecommended">恢复推荐值</button>
+      <button class="save-button" bindtap="saveNutritionTargets">保存设置</button>
+    </view>
+  </view>
+</scroll-view>
+
+<!-- 维生素/矿物质编辑弹窗 -->
+<view class="edit-modal {{showEditModal ? 'show' : ''}}" bindtap="cancelEdit">
+  <view class="modal-content" catchtap="stopPropagation">
+    <view class="modal-header">
+      <view class="modal-title">设置{{currentEdit.name}}目标</view>
+      <view class="modal-close" bindtap="cancelEdit">×</view>
+    </view>
+    <view class="modal-body">
+      <view class="current-value-display">
+        {{currentEdit.value}}{{currentEdit.unit}}
+      </view>
+      <view class="slider-container">
+        <slider 
+          min="{{currentEdit.min}}" 
+          max="{{currentEdit.max}}" 
+          step="{{currentEdit.step}}" 
+          value="{{currentEdit.value}}" 
+          activeColor="#4CAF50" 
+          block-size="24" 
+          bindchange="onElementValueChange"
+        />
+        <view class="range-labels">
+          <text>{{currentEdit.min}}{{currentEdit.unit}}</text>
+          <text>{{currentEdit.max}}{{currentEdit.unit}}</text>
+        </view>
+      </view>
+      <view class="element-info">
+        <view class="info-title">{{currentEdit.name}}的作用：</view>
+        <view class="info-desc">{{currentEdit.description}}</view>
+        <view class="info-title">食物来源：</view>
+        <view class="info-desc">{{currentEdit.foodSources}}</view>
+        <view class="info-title">推荐摄入量：</view>
+        <view class="info-desc">{{currentEdit.recommended}}{{currentEdit.unit}}</view>
+      </view>
+    </view>
+    <view class="modal-footer">
+      <view class="cancel-button" bindtap="cancelEdit">取消</view>
+      <view class="confirm-button" bindtap="confirmEdit">确认</view>
+    </view>
+  </view>
+</view> 

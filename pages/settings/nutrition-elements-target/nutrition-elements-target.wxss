@@ -1,0 +1,420 @@
+/* nutrition-elements-target.wxss */
+page {
+  background-color: #f8f8f8;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.container {
+  padding: 20rpx 30rpx;
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 导航标签 */
+.nav-tabs {
+  display: flex;
+  background: #fff;
+  margin-bottom: 20rpx;
+  border-radius: 12rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.tab {
+  flex: 1;
+  height: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
+  font-size: 28rpx;
+  color: #666;
+  position: relative;
+}
+
+.tab.active {
+  color: #4CAF50;
+  font-weight: bold;
+}
+
+.tab.active:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40%;
+  height: 6rpx;
+  background-color: #4CAF50;
+  border-radius: 3rpx 3rpx 0 0;
+}
+
+/* 三大营养素设置样式 */
+.tab-content {
+  margin-bottom: 20rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 三大营养素网格布局 */
+.macro-grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.macro-grid-item {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 20rpx 15rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.macro-slider-container {
+  margin: 15rpx auto 10rpx;
+  width: 95%;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.macro-recommendation {
+  font-size: 24rpx;
+  color: #666;
+  background-color: #f0f9eb;
+  padding: 6rpx 12rpx;
+  border-radius: 6rpx;
+  display: inline-block;
+  margin-top: 5rpx;
+}
+
+/* 原有的单列项目样式 - 保留但调整部分属性 */
+.nutrition-item {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx 20rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.nutrition-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10rpx; /* 减小间距 */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.nutrition-info {
+  flex: 1;
+}
+
+.nutrition-name {
+  font-size: 28rpx; /* 减小字体 */
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 4rpx; /* 减小间距 */
+}
+
+.nutrition-desc {
+  font-size: 22rpx; /* 减小字体 */
+  color: #888;
+}
+
+.nutrition-value {
+  font-size: 30rpx; /* 减小字体 */
+  font-weight: bold;
+  color: #4CAF50;
+}
+
+/* 自定义滑块容器 */
+.slider-container {
+  margin: 30rpx auto 20rpx;
+  width: 90%;
+  box-sizing: border-box;
+  position: relative;
+}
+
+slider {
+  width: 100%;
+  margin: 12rpx 0; /* 减小间距 */
+  box-sizing: border-box;
+}
+
+.range-labels {
+  display: flex;
+  justify-content: space-between;
+  color: #888;
+  font-size: 22rpx; /* 减小字体 */
+  margin-bottom: 6rpx; /* 减小间距 */
+  padding: 0 8rpx;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.recommendation {
+  font-size: 26rpx;
+  color: #666;
+  background-color: #f0f9eb;
+  padding: 10rpx 20rpx;
+  border-radius: 6rpx;
+  display: inline-block;
+  margin-top: 5rpx;
+}
+
+/* 维生素和矿物质网格样式 */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.grid-item {
+  background-color: #fff;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  box-sizing: border-box;
+  height: 100%;
+}
+
+.grid-item-content {
+  padding: 20rpx;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.item-name {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.item-value {
+  font-size: 34rpx;
+  color: #4CAF50;
+  margin-bottom: 10rpx;
+}
+
+.item-status-container {
+  display: flex;
+  width: 100%;
+}
+
+.item-status {
+  font-size: 24rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 20rpx;
+  display: inline-block;
+  white-space: nowrap;
+  width: auto;
+}
+
+.item-status.recommended {
+  background-color: #f0f9eb;
+  color: #67c23a;
+}
+
+.item-status.high {
+  background-color: #fdf6ec;
+  color: #e6a23c;
+}
+
+.item-status.low {
+  background-color: #fef0f0;
+  color: #f56c6c;
+}
+
+/* 底部信息和按钮 */
+.info-box {
+  background-color: #f0f9eb;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  margin-bottom: 30rpx;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.info-text {
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 8rpx;
+}
+
+.info-hint {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.button-container {
+  display: flex;
+  margin-top: 30rpx;
+  margin-bottom: 40rpx;
+  gap: 20rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.reset-button {
+  flex: 1;
+  height: 90rpx;
+  line-height: 90rpx;
+  background-color: #f0f0f0;
+  color: #666;
+  font-size: 30rpx;
+  border-radius: 45rpx;
+  padding: 0;
+}
+
+.save-button {
+  flex: 1;
+  height: 90rpx;
+  line-height: 90rpx;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 30rpx;
+  font-weight: bold;
+  border-radius: 45rpx;
+  padding: 0;
+}
+
+/* 编辑弹窗样式 */
+.edit-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s;
+}
+
+.edit-modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  width: 650rpx;
+  background-color: #fff;
+  border-radius: 20rpx;
+  overflow: hidden;
+  transform: scale(0.9);
+  transition: transform 0.3s;
+  box-sizing: border-box;
+}
+
+.edit-modal.show .modal-content {
+  transform: scale(1);
+}
+
+.modal-header {
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.modal-close {
+  font-size: 40rpx;
+  color: #999;
+  line-height: 1;
+}
+
+.modal-body {
+  padding: 30rpx;
+}
+
+.current-value-display {
+  font-size: 50rpx;
+  font-weight: bold;
+  color: #4CAF50;
+  text-align: center;
+  margin-bottom: 20rpx;
+}
+
+.element-info {
+  margin-top: 30rpx;
+  background-color: #f9f9f9;
+  padding: 20rpx;
+  border-radius: 10rpx;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.info-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.info-desc {
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 20rpx;
+  line-height: 1.5;
+}
+
+/* 弹窗按钮样式 */
+.modal-footer {
+  display: flex;
+  border-top: 1rpx solid #f0f0f0;
+  width: 100%;
+}
+
+.cancel-button, .confirm-button {
+  flex: 1;
+  height: 90rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30rpx;
+  box-sizing: border-box;
+}
+
+.cancel-button {
+  color: #666;
+  background-color: #f8f8f8;
+}
+
+.confirm-button {
+  color: #fff;
+  background-color: #4CAF50;
+}
+
+.page-scroll {
+  height: 100%;
+  width: 100%;
+} 

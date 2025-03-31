@@ -1,0 +1,168 @@
+<!--restrictions.wxml-->
+<scroll-view scroll-y class="page-scroll">
+  <view class="container">
+    <!-- 页面标题 -->
+    <section-header title="饮食禁忌" subtitle="为您的饮食计划设置个性化食材限制"></section-header>
+    
+    <!-- 当前成员 -->
+    <view class="member-badge">
+      <text class="member-label">{{memberName || '自己'}}</text>
+    </view>
+    
+    <!-- 标签页导航 -->
+    <view class="tab-nav">
+      <view class="tab-item {{activeTab === 'allergies' ? 'active' : ''}}" 
+            bindtap="switchTab" data-tab="allergies">
+        <text class="tab-icon">⚠️</text>
+        <text class="tab-text">过敏源</text>
+      </view>
+      <view class="tab-item {{activeTab === 'religious' ? 'active' : ''}}" 
+            bindtap="switchTab" data-tab="religious">
+        <text class="tab-icon">🚫</text>
+        <text class="tab-text">宗教禁忌</text>
+      </view>
+      <view class="tab-item {{activeTab === 'custom' ? 'active' : ''}}" 
+            bindtap="switchTab" data-tab="custom">
+        <text class="tab-icon">✏️</text>
+        <text class="tab-text">自定义</text>
+      </view>
+    </view>
+    
+    <!-- 过敏源选择 -->
+    <view class="content-area" hidden="{{activeTab !== 'allergies'}}">
+      <view class="info-text">
+        <text>选择需要避免的食物过敏源，系统将为您智能过滤</text>
+      </view>
+      
+      <view class="grid-restrictions">
+        <view class="grid-item {{selectedAllergies.includes(item.id) ? 'selected' : ''}}" 
+              wx:for="{{predefinedAllergies}}" 
+              wx:key="id"
+              bindtap="toggleAllergy"
+              data-id="{{item.id}}">
+          <view class="grid-content">
+            <view class="grid-icon">{{item.icon}}</view>
+            <view class="grid-name">{{item.name}}</view>
+            <view class="grid-check" wx:if="{{selectedAllergies.includes(item.id)}}">✓</view>
+          </view>
+          <view class="grid-desc">{{item.description}}</view>
+        </view>
+      </view>
+      
+      <view class="add-text" bindtap="showAddCustom">
+        <text class="add-icon">+</text> 添加自定义过敏源
+      </view>
+    </view>
+    
+    <!-- 宗教禁忌选择 -->
+    <view class="content-area" hidden="{{activeTab !== 'religious'}}">
+      <view class="info-text">
+        <text>选择需要遵循的宗教饮食规则，帮助您维持信仰习惯</text>
+      </view>
+      
+      <view class="grid-restrictions">
+        <view class="grid-item {{selectedReligious.includes(item.id) ? 'selected' : ''}}" 
+              wx:for="{{predefinedReligious}}" 
+              wx:key="id"
+              bindtap="toggleReligious"
+              data-id="{{item.id}}">
+          <view class="grid-content">
+            <view class="grid-icon">{{item.icon}}</view>
+            <view class="grid-name">{{item.name}}</view>
+            <view class="grid-check" wx:if="{{selectedReligious.includes(item.id)}}">✓</view>
+          </view>
+          <view class="grid-desc">{{item.description}}</view>
+        </view>
+      </view>
+      
+      <view class="add-text" bindtap="showAddCustom">
+        <text class="add-icon">+</text> 添加自定义饮食规则
+      </view>
+    </view>
+    
+    <!-- 自定义禁忌 -->
+    <view class="content-area" hidden="{{activeTab !== 'custom'}}">
+      <view class="info-text">
+        <text>管理您添加的所有自定义饮食限制</text>
+      </view>
+      
+      <view class="empty-hint" wx:if="{{customRestrictions.length === 0}}">
+        <view class="empty-icon">📝</view>
+        <view class="empty-text">暂无自定义禁忌，点击下方按钮添加</view>
+      </view>
+      
+      <view class="custom-grid" wx:else>
+        <view class="custom-grid-item" wx:for="{{customRestrictions}}" wx:key="id">
+          <view class="custom-tag {{item.type === 'allergies' ? 'tag-allergy' : 'tag-religious'}}">
+            {{item.type === 'allergies' ? '过敏源' : '宗教禁忌'}}
+          </view>
+          <view class="custom-header">
+            <view class="custom-icon">{{item.icon}}</view>
+            <view class="custom-name">{{item.name}}</view>
+          </view>
+          <view class="custom-desc" wx:if="{{item.description}}">{{item.description}}</view>
+          <view class="delete-btn" bindtap="deleteCustom" data-id="{{item.id}}">
+            <text class="delete-icon">×</text>
+          </view>
+        </view>
+      </view>
+      
+      <view class="add-text" bindtap="showAddCustom">
+        <text class="add-icon">+</text> 添加自定义禁忌
+      </view>
+    </view>
+    
+    <!-- 说明提示 -->
+    <view class="tips-box" wx:if="{{activeTab !== 'custom'}}">
+      <view class="tips-icon">💡</view>
+      <view class="tips-content">
+        <text class="tips-title">智能推荐提示</text>
+        <text class="tips-text">设置饮食禁忌后，系统将自动为您过滤包含这些成分的食谱，并在购物清单中提醒您避免购买。</text>
+      </view>
+    </view>
+    
+    <!-- 保存按钮 -->
+    <view class="button-container">
+      <button class="save-button" bindtap="saveRestrictions">保存设置</button>
+    </view>
+  </view>
+</scroll-view>
+
+<!-- 添加自定义禁忌弹窗 -->
+<view class="modal {{showAddModal ? 'show' : ''}}" bindtap="closeAddModal">
+  <view class="modal-content" catchtap>
+    <view class="modal-header">
+      <view class="modal-title">添加自定义禁忌</view>
+      <view class="modal-close" bindtap="closeAddModal">×</view>
+    </view>
+    
+    <view class="modal-body">
+      <view class="form-item">
+        <view class="form-label">禁忌名称</view>
+        <input class="form-input" placeholder="如：草莓过敏" bindinput="onInputChange" data-field="name" value="{{newRestriction.name}}"/>
+      </view>
+      
+      <view class="form-item">
+        <view class="form-label">描述（可选）</view>
+        <input class="form-input" placeholder="简短描述该禁忌" bindinput="onInputChange" data-field="description" value="{{newRestriction.description}}"/>
+      </view>
+      
+      <view class="form-item">
+        <view class="form-label">分类</view>
+        <radio-group class="type-radio-group" bindchange="onTypeChange">
+          <label class="type-radio">
+            <radio value="allergies" checked="{{newRestriction.type === 'allergies'}}"/>过敏源
+          </label>
+          <label class="type-radio">
+            <radio value="religious" checked="{{newRestriction.type === 'religious'}}"/>宗教禁忌
+          </label>
+        </radio-group>
+      </view>
+    </view>
+    
+    <view class="modal-footer">
+      <view class="cancel-btn" bindtap="closeAddModal">取消</view>
+      <view class="confirm-btn" bindtap="addCustomRestriction">添加</view>
+    </view>
+  </view>
+</view> 

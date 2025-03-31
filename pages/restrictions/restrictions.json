@@ -1,0 +1,6 @@
+{
+    "navigationBarTitleText": "饮食管理",
+    "usingComponents": {
+        "section-header": "/components/section-header/section-header"
+    }
+}

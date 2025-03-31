@@ -1,0 +1,228 @@
+<!--plan.wxml-->
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="container">
+    <!-- 主标题和日期 -->
+    <view class="header-container">
+      <view class="main-title">食谱计划</view>
+      <view class="date-display">{{currentDate}}</view>
+    </view>
+    
+    <!-- 日历视图 -->
+    <view class="calendar-view">
+      <scroll-view class="week-scroll" scroll-x="true">
+        <view class="week-days">
+          <view class="day-item {{item.isToday ? 'today' : ''}} {{item.fullDate === selectedDate ? 'selected' : ''}}" 
+                wx:for="{{currentWeekDates}}" 
+                wx:key="fullDate"
+                bindtap="selectDate"
+                data-date="{{item.fullDate}}">
+            <view class="day-number">{{item.day}}</view>
+            <view class="day-name">{{item.weekDay}}</view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+    
+    <!-- 餐饮计划 -->
+    <view class="section-header">
+      <view class="section-title">今日餐饮计划</view>
+      <view class="header-row">
+        <view class="section-subtitle">{{selectedDate}} 餐饮安排</view>
+      </view>
+    </view>
+    
+    <view class="meal-plan-container">
+      <!-- 早餐 -->
+      <view class="meal-section">
+        <view class="meal-header">
+          <view class="meal-title-group">
+            <view class="meal-icon breakfast-icon"></view>
+            <view class="meal-title-wrapper">
+              <view class="meal-title">早餐</view>
+              <view class="meal-time">07:00 - 09:00</view>
+            </view>
+          </view>
+          <view class="meal-status {{mealPlans[selectedDate].breakfast ? 'status-planned' : 'status-empty'}}">
+            {{mealPlans[selectedDate].breakfast ? '已计划' : '待添加'}}
+          </view>
+        </view>
+        
+        <view class="meal-card {{!mealPlans[selectedDate].breakfast ? 'empty-meal' : ''}}" 
+              bindtap="showRecommendations" 
+              data-meal="breakfast" 
+              data-date="{{selectedDate}}">
+          <block wx:if="{{mealPlans[selectedDate].breakfast}}">
+            <view class="meal-content">
+              <image class="meal-image" src="{{mealPlans[selectedDate].breakfast.image}}" mode="aspectFill"></image>
+              <view class="meal-info">
+                <view class="meal-name">{{mealPlans[selectedDate].breakfast.name}}</view>
+                <view class="meal-nutrition">
+                  <view class="nutrition-item">
+                    <view class="nutrition-value">{{mealPlans[selectedDate].breakfast.calories}}</view>
+                    <view class="nutrition-label">千卡</view>
+                  </view>
+                  <view class="nutrition-divider"></view>
+                  <view class="nutrition-item">
+                    <view class="nutrition-value">{{mealPlans[selectedDate].breakfast.protein}}</view>
+                    <view class="nutrition-label">蛋白质(g)</view>
+                  </view>
+                </view>
+              </view>
+            </view>
+            <view class="meal-actions">
+              <view class="action-icon edit-icon" catchtap="editMeal" data-meal="breakfast" data-date="{{selectedDate}}"></view>
+              <view class="action-icon delete-icon" catchtap="deleteMeal" data-meal="breakfast" data-date="{{selectedDate}}"></view>
+            </view>
+          </block>
+          <block wx:else>
+            <view class="empty-meal-content">
+              <view class="empty-meal-icon"></view>
+              <view class="empty-meal-text">添加早餐</view>
+              <view class="empty-meal-subtext">点击浏览推荐食谱</view>
+            </view>
+          </block>
+        </view>
+      </view>
+      
+      <!-- 午餐 -->
+      <view class="meal-section">
+        <view class="meal-header">
+          <view class="meal-title-group">
+            <view class="meal-icon lunch-icon"></view>
+            <view class="meal-title-wrapper">
+              <view class="meal-title">午餐</view>
+              <view class="meal-time">12:00 - 14:00</view>
+            </view>
+          </view>
+          <view class="meal-status {{mealPlans[selectedDate].lunch ? 'status-planned' : 'status-empty'}}">
+            {{mealPlans[selectedDate].lunch ? '已计划' : '待添加'}}
+          </view>
+        </view>
+        
+        <view class="meal-card {{!mealPlans[selectedDate].lunch ? 'empty-meal' : ''}}" 
+              bindtap="showRecommendations" 
+              data-meal="lunch" 
+              data-date="{{selectedDate}}">
+          <block wx:if="{{mealPlans[selectedDate].lunch}}">
+            <view class="meal-content">
+              <image class="meal-image" src="{{mealPlans[selectedDate].lunch.image}}" mode="aspectFill"></image>
+              <view class="meal-info">
+                <view class="meal-name">{{mealPlans[selectedDate].lunch.name}}</view>
+                <view class="meal-nutrition">
+                  <view class="nutrition-item">
+                    <view class="nutrition-value">{{mealPlans[selectedDate].lunch.calories}}</view>
+                    <view class="nutrition-label">千卡</view>
+                  </view>
+                  <view class="nutrition-divider"></view>
+                  <view class="nutrition-item">
+                    <view class="nutrition-value">{{mealPlans[selectedDate].lunch.protein}}</view>
+                    <view class="nutrition-label">蛋白质(g)</view>
+                  </view>
+                </view>
+              </view>
+            </view>
+            <view class="meal-actions">
+              <view class="action-icon edit-icon" catchtap="editMeal" data-meal="lunch" data-date="{{selectedDate}}"></view>
+              <view class="action-icon delete-icon" catchtap="deleteMeal" data-meal="lunch" data-date="{{selectedDate}}"></view>
+            </view>
+          </block>
+          <block wx:else>
+            <view class="empty-meal-content">
+              <view class="empty-meal-icon"></view>
+              <view class="empty-meal-text">添加午餐</view>
+              <view class="empty-meal-subtext">点击浏览推荐食谱</view>
+            </view>
+          </block>
+        </view>
+      </view>
+      
+      <!-- 晚餐 -->
+      <view class="meal-section">
+        <view class="meal-header">
+          <view class="meal-title-group">
+            <view class="meal-icon dinner-icon"></view>
+            <view class="meal-title-wrapper">
+              <view class="meal-title">晚餐</view>
+              <view class="meal-time">18:00 - 20:00</view>
+            </view>
+          </view>
+          <view class="meal-status {{mealPlans[selectedDate].dinner ? 'status-planned' : 'status-empty'}}">
+            {{mealPlans[selectedDate].dinner ? '已计划' : '待添加'}}
+          </view>
+        </view>
+        
+        <view class="meal-card {{!mealPlans[selectedDate].dinner ? 'empty-meal' : ''}}" 
+              bindtap="showRecommendations" 
+              data-meal="dinner" 
+              data-date="{{selectedDate}}">
+          <block wx:if="{{mealPlans[selectedDate].dinner}}">
+            <view class="meal-content">
+              <image class="meal-image" src="{{mealPlans[selectedDate].dinner.image}}" mode="aspectFill"></image>
+              <view class="meal-info">
+                <view class="meal-name">{{mealPlans[selectedDate].dinner.name}}</view>
+                <view class="meal-nutrition">
+                  <view class="nutrition-item">
+                    <view class="nutrition-value">{{mealPlans[selectedDate].dinner.calories}}</view>
+                    <view class="nutrition-label">千卡</view>
+                  </view>
+                  <view class="nutrition-divider"></view>
+                  <view class="nutrition-item">
+                    <view class="nutrition-value">{{mealPlans[selectedDate].dinner.protein}}</view>
+                    <view class="nutrition-label">蛋白质(g)</view>
+                  </view>
+                </view>
+              </view>
+            </view>
+            <view class="meal-actions">
+              <view class="action-icon edit-icon" catchtap="editMeal" data-meal="dinner" data-date="{{selectedDate}}"></view>
+              <view class="action-icon delete-icon" catchtap="deleteMeal" data-meal="dinner" data-date="{{selectedDate}}"></view>
+            </view>
+          </block>
+          <block wx:else>
+            <view class="empty-meal-content">
+              <view class="empty-meal-icon"></view>
+              <view class="empty-meal-text">添加晚餐</view>
+              <view class="empty-meal-subtext">点击浏览推荐食谱</view>
+            </view>
+          </block>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 批量操作 -->
+    <view class="quick-actions">
+      <view class="action-button action-primary" bindtap="generateShoppingList">生成购物清单</view>
+      <view class="action-button action-secondary" bindtap="shareWeekPlan">分享食谱计划</view>
+    </view>
+  </view>
+</scroll-view>
+
+<!-- 推荐菜谱弹窗 -->
+<view class="recommend-modal {{showRecommendModal ? 'show' : ''}}">
+  <view class="modal-mask" bindtap="hideRecommendModal"></view>
+  <view class="modal-content">
+    <view class="modal-header">
+      <view class="modal-title">推荐菜谱</view>
+      <view class="modal-close" bindtap="hideRecommendModal">×</view>
+    </view>
+    
+    <view class="modal-body">
+      <view class="recommend-list">
+        <view class="recommend-item" 
+              wx:for="{{recommendedRecipes}}" 
+              wx:key="id"
+              bindtap="selectRecipe"
+              data-id="{{item.id}}">
+          <image class="recommend-image" src="{{item.image}}" mode="aspectFill"></image>
+          <view class="recommend-info">
+            <view class="recommend-name">{{item.name}}</view>
+            <view class="recommend-meta">
+              <text class="recommend-match">匹配度 {{item.matchRate}}%</text>
+              <text class="recommend-calories">{{item.calories}} 千卡</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

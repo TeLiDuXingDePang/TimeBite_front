@@ -1,0 +1,5 @@
+<!--components/section-header/section-header.wxml-->
+<view class="section-header {{align}}">
+  <view class="title">{{title}}</view>
+  <view class="subtitle" wx:if="{{subtitle}}">{{subtitle}}</view>
+</view> 

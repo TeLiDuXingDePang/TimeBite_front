@@ -1,0 +1,108 @@
+<!--help.wxml-->
+<view class="help-container">
+  <!-- 顶部导航 -->
+  <view class="tab-nav">
+    <view class="tab-item {{activeTab === 'faq' ? 'active' : ''}}" bindtap="switchTab" data-tab="faq">常见问题</view>
+    <view class="tab-item {{activeTab === 'feedback' ? 'active' : ''}}" bindtap="switchTab" data-tab="feedback">提交反馈</view>
+    <view class="tab-indicator" style="left: {{activeTab === 'faq' ? '25%' : '75%'}}"></view>
+  </view>
+
+  <!-- 常见问题内容 -->
+  <view class="content-area" hidden="{{activeTab !== 'faq'}}">
+    <view class="faq-list">
+      <view class="faq-item" wx:for="{{faqList}}" wx:key="index" bindtap="toggleFaq" data-index="{{index}}">
+        <view class="faq-question">
+          <text>{{item.question}}</text>
+          <view class="arrow {{item.isOpen ? 'open' : ''}}"></view>
+        </view>
+        <view class="faq-answer {{item.isOpen ? 'show' : ''}}">
+          <text>{{item.answer}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="contact-section">
+      <view class="contact-title">联系我们</view>
+      <view class="contact-methods">
+        <view class="contact-item" bindtap="copyEmail">
+          <image class="contact-icon" src="/assets/icons/email.svg" mode="aspectFit"></image>
+          <text>邮箱：3159268198@qq.com</text>
+          <text class="copy-hint">点击复制</text>
+        </view>
+        <view class="contact-item" bindtap="callService">
+          <image class="contact-icon" src="/assets/icons/phone.svg" mode="aspectFit"></image>
+          <text>客服热线：15347602198</text>
+          <text class="copy-hint">点击拨打</text>
+        </view>
+        <!-- <view class="contact-item" bindtap="copyWechat">
+          <image class="contact-icon" src="/assets/icons/wechat.svg" mode="aspectFit"></image>
+          <text>微信公众号：食光机营养</text>
+          <text class="copy-hint">点击复制</text>
+        </view> -->
+      </view>
+    </view>
+  </view>
+
+  <!-- 提交反馈内容 -->
+  <view class="content-area" hidden="{{activeTab !== 'feedback'}}">
+    <view class="feedback-form">
+      <view class="form-group">
+        <view class="form-label">反馈类型</view>
+        <view class="feedback-types">
+          <view class="type-item {{feedbackType === 'bug' ? 'selected' : ''}}" bindtap="selectFeedbackType" data-type="bug">
+            <text>功能异常</text>
+          </view>
+          <view class="type-item {{feedbackType === 'suggestion' ? 'selected' : ''}}" bindtap="selectFeedbackType" data-type="suggestion">
+            <text>建议优化</text>
+          </view>
+          <view class="type-item {{feedbackType === 'content' ? 'selected' : ''}}" bindtap="selectFeedbackType" data-type="content">
+            <text>内容问题</text>
+          </view>
+          <view class="type-item {{feedbackType === 'other' ? 'selected' : ''}}" bindtap="selectFeedbackType" data-type="other">
+            <text>其他</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="form-group">
+        <view class="form-label">问题描述</view>
+        <textarea class="feedback-textarea" placeholder="请详细描述您遇到的问题或建议..." bindinput="inputFeedback" value="{{feedbackContent}}" maxlength="500"></textarea>
+        <view class="word-count">{{feedbackContent.length}}/500</view>
+      </view>
+
+      <view class="form-group">
+        <view class="form-label">上传截图（选填）</view>
+        <view class="upload-area">
+          <view class="image-list">
+            <view class="image-item" wx:for="{{imageList}}" wx:key="index">
+              <image src="{{item}}" mode="aspectFill" bindtap="previewImage" data-index="{{index}}"></image>
+              <view class="delete-icon" bindtap="deleteImage" data-index="{{index}}">×</view>
+            </view>
+            <view class="upload-button" bindtap="chooseImage" wx:if="{{imageList.length < 3}}">
+              <view class="plus">+</view>
+              <view class="text">上传图片</view>
+            </view>
+          </view>
+          <text class="upload-tip">最多可上传3张图片</text>
+        </view>
+      </view>
+
+      <view class="form-group">
+        <view class="form-label">联系方式（选填）</view>
+        <input class="contact-input" placeholder="手机号或邮箱，方便我们联系您" bindinput="inputContact" value="{{contactInfo}}"></input>
+      </view>
+
+      <button class="submit-button {{canSubmit ? '' : 'disabled'}}" bindtap="submitFeedback" disabled="{{!canSubmit}}">提交反馈</button>
+    </view>
+  </view>
+</view>
+
+<!-- 提交成功弹窗 -->
+<view class="modal" hidden="{{!showSuccessModal}}" bindtap="closeSuccessModal">
+  <view class="modal-content" catchtap="preventBubble">
+    <view class="success-icon">✓</view>
+    <view class="modal-title">提交成功</view>
+    <view class="modal-text">感谢您的反馈，我们会尽快处理</view>
+    <button class="modal-button" bindtap="closeSuccessModal">确定</button>
+  </view>
+</view> 

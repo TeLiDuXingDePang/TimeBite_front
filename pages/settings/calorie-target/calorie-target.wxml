@@ -1,0 +1,85 @@
+<!--calorie-target.wxml-->
+<scroll-view scroll-y class="page-scroll">
+  <view class="container">
+    <section-header title="热量目标设置" subtitle="根据您的健康目标调整每日热量摄入"></section-header>
+
+    <!-- 热量选择器 -->
+    <view class="calorie-section">
+      <view class="current-value">{{currentCalorie}} 千卡</view>
+      <view class="slider-container">
+        <slider 
+          min="1000" 
+          max="3500" 
+          step="50" 
+          block-size="28" 
+          activeColor="#4CAF50" 
+          backgroundColor="#E0E0E0"
+          value="{{currentCalorie}}" 
+          bindchange="onCalorieChange"
+          show-value="{{false}}"
+        />
+        <view class="range-labels">
+          <text>1000</text>
+          <text>2250</text>
+          <text>3500</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 健康目标选择 -->
+    <view class="goal-section">
+      <view class="section-title">健康目标</view>
+      <radio-group class="goal-group" bindchange="onGoalChange">
+        <label class="goal-item {{goalType === 'weightLoss' ? 'active' : ''}}" for="weightLoss">
+          <radio id="weightLoss" value="weightLoss" checked="{{goalType === 'weightLoss'}}" color="#4CAF50" />
+          <view class="goal-info">
+            <view class="goal-name">减脂</view>
+            <view class="goal-description">每日摄入低于基础代谢，帮助减少体脂</view>
+          </view>
+        </label>
+        <label class="goal-item {{goalType === 'maintenance' ? 'active' : ''}}" for="maintenance">
+          <radio id="maintenance" value="maintenance" checked="{{goalType === 'maintenance'}}" color="#4CAF50" />
+          <view class="goal-info">
+            <view class="goal-name">维持</view>
+            <view class="goal-description">保持当前体重，平衡营养摄入</view>
+          </view>
+        </label>
+        <label class="goal-item {{goalType === 'muscleGain' ? 'active' : ''}}" for="muscleGain">
+          <radio id="muscleGain" value="muscleGain" checked="{{goalType === 'muscleGain'}}" color="#4CAF50" />
+          <view class="goal-info">
+            <view class="goal-name">增肌</view>
+            <view class="goal-description">适量增加热量摄入，配合训练增长肌肉</view>
+          </view>
+        </label>
+      </radio-group>
+    </view>
+
+    <!-- 基础数据 -->
+    <view class="data-section">
+      <view class="section-title">身体数据</view>
+      <view class="data-card">
+        <view class="data-item">
+          <view class="data-label">基础代谢率</view>
+          <view class="data-value">{{bmr}} 千卡</view>
+        </view>
+        <view class="data-item">
+          <view class="data-label">活动水平</view>
+          <picker bindchange="onActivityLevelChange" value="{{activityLevelIndex}}" range="{{activityLevels}}">
+            <view class="data-value picker">{{activityLevels[activityLevelIndex]}}</view>
+          </picker>
+        </view>
+      </view>
+    </view>
+
+    <!-- 建议范围提示 -->
+    <view class="suggestion-box">
+      <view class="suggestion-title">根据您的身体数据，建议热量摄入范围</view>
+      <view class="suggestion-range">{{suggestedMin}} - {{suggestedMax}} 千卡/天</view>
+    </view>
+
+    <!-- 底部保存按钮 -->
+    <view class="button-container">
+      <button class="save-button" bindtap="saveCalorieTarget">保存设置</button>
+    </view>
+  </view>
+</scroll-view> 

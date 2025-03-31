@@ -1,0 +1,186 @@
+<!-- 我的页面 -->
+<view class="profile-container">
+  <!-- 顶部身份卡 -->
+  <view class="user-card">
+    <view class="user-info">
+      <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+      <view class="user-details">
+        <view class="username">{{userInfo.nickName}}</view>
+        <view class="health-goal">{{userInfo.healthGoal}}</view>
+      </view>
+      <!-- 添加编辑按钮 -->
+      <view class="edit-btn" bindtap="showEditUserInfo">
+        <text class="edit-icon">✏️</text>
+      </view>
+    </view>
+    <view class="quick-actions">
+      <view class="action-item" bindtap="switchFamilyMode">
+        <image class="action-icon" src="/assets/icons/family.svg"></image>
+        <text>家庭模式</text>
+      </view>
+      <view class="action-item" bindtap="manageDietaryRestrictions">
+        <image class="action-icon" src="/assets/icons/restriction.svg"></image>
+        <text>饮食禁忌</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 功能列表 -->
+  <view class="function-list">
+    <!-- 营养相关设置 -->
+    <view class="section-title">营养相关设置</view>
+    <view class="list-item" bindtap="setCalorieTarget">
+      <image class="item-icon" src="/assets/icons/calorie.svg"></image>
+      <text class="item-text">热量目标设置</text>
+      <text class="item-value">{{calorieTarget}}千卡/天</text>
+      <image class="arrow-icon" src="/assets/icons/arrow-right.svg"></image>
+    </view>
+    <view class="list-item" bindtap="setNutritionElementsTarget">
+      <image class="item-icon" src="/assets/icons/nutrition.svg"></image>
+      <text class="item-text">营养元素目标</text>
+      <image class="arrow-icon" src="/assets/icons/arrow-right.svg"></image>
+    </view>
+
+    <!-- 通知与隐私设置 -->
+    <view class="section-title">通知设置</view>
+    <view class="list-item" bindtap="setExpiryReminder">
+      <image class="item-icon" src="/assets/icons/reminder.svg"></image>
+      <text class="item-text">保质期提醒时间</text>
+      <text class="item-value">{{expiryReminderTime >= 24 ? expiryReminderTime/24 + '天' : expiryReminderTime + '小时'}}</text>
+      <image class="arrow-icon" src="/assets/icons/arrow-right.svg"></image>
+    </view>
+    <view class="list-item" bindtap="setPushPreferences">
+      <image class="item-icon" src="/assets/icons/notification.svg"></image>
+      <text class="item-text">推送偏好</text>
+      <image class="arrow-icon" src="/assets/icons/arrow-right.svg"></image>
+    </view>
+
+    <!-- 高级服务与会员权益 -->
+    <view class="section-title">高级服务与会员权益</view>
+    <view class="list-item" bindtap="consultNutritionist">
+      <image class="item-icon" src="/assets/icons/consultant.svg"></image>
+      <text class="item-text">专业营养师咨询</text>
+      <text class="item-value premium">铂金会员 | 无限次</text>
+      <image class="arrow-icon" src="/assets/icons/arrow-right.svg"></image>
+    </view>
+    <view class="list-item" bindtap="navigateToMemberCenter">
+      <image class="item-icon" src="/assets/icons/vip.svg"></image>
+      <text class="item-text">会员中心</text>
+      <image class="arrow-icon" src="/assets/icons/arrow-right.svg"></image>
+    </view>
+    <view class="list-item" bindtap="navigateToPointsMall">
+      <image class="item-icon" src="/assets/icons/points.svg"></image>
+      <text class="item-text">积分商城</text>
+      <text class="item-value">1280积分</text>
+      <image class="arrow-icon" src="/assets/icons/arrow-right.svg"></image>
+    </view>
+
+    <!-- 系统辅助功能 -->
+    <view class="section-title">系统辅助功能</view>
+    <view class="list-item" bindtap="navigateToHelp">
+      <image class="item-icon" src="/assets/icons/help.svg"></image>
+      <text class="item-text">帮助与反馈</text>
+      <image class="arrow-icon" src="/assets/icons/arrow-right.svg"></image>
+    </view>
+    <view class="list-item" bindtap="navigateToPrivacyPolicy">
+      <image class="item-icon" src="/assets/icons/privacy.svg"></image>
+      <text class="item-text">隐私政策</text>
+      <image class="arrow-icon" src="/assets/icons/arrow-right.svg"></image>
+    </view>
+    <view class="list-item" bindtap="navigateToUserAgreement">
+      <image class="item-icon" src="/assets/icons/agreement.svg"></image>
+      <text class="item-text">用户协议</text>
+      <image class="arrow-icon" src="/assets/icons/arrow-right.svg"></image>
+    </view>
+    <view class="list-item" bindtap="navigateToAbout">
+      <image class="item-icon" src="/assets/icons/about.svg"></image>
+      <text class="item-text">关于食光机</text>
+      <image class="arrow-icon" src="/assets/icons/arrow-right.svg"></image>
+    </view>
+  </view>
+</view>
+
+<!-- 保质期提醒时间选择器模态框 -->
+<view class="modal {{showExpiryPickerModal ? 'show' : ''}}" catchtouchmove="preventTouchMove">
+  <view class="modal-content" catchtap>
+    <view class="modal-header">
+      <view class="modal-title">设置保质期提醒时间</view>
+      <view class="modal-close" bindtap="closeExpiryPicker">×</view>
+    </view>
+    <view class="modal-body">
+      <view class="modal-description">
+        在食材到期前多久提醒您？
+      </view>
+      <view class="time-options">
+        <view class="time-option {{expiryReminderTime === item.hours ? 'active' : ''}}" 
+              wx:for="{{reminderOptions}}" 
+              wx:key="hours"
+              bindtap="selectExpiryReminderTime" 
+              data-time="{{item.hours}}">
+          <view class="option-value">{{item.days}}天</view>
+          <view class="option-desc">{{item.desc}}</view>
+          <view class="option-check" wx:if="{{expiryReminderTime === item.hours}}">✓</view>
+        </view>
+      </view>
+      <view class="tips-box">
+        <view class="tips-icon">💡</view>
+        <view class="tips-text">系统将在食材到期前{{expiryReminderTime/24}}天发送提醒，并推荐相关菜谱帮助您及时使用。</view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 用户信息编辑模态框 -->
+<view class="modal {{showEditUserInfoModal ? 'show' : ''}}" catchtouchmove="preventTouchMove">
+  <view class="modal-content user-info-edit" catchtap>
+    <view class="modal-header">
+      <view class="modal-title">编辑个人信息</view>
+      <view class="modal-close" bindtap="closeEditUserInfo">×</view>
+    </view>
+    <view class="modal-body">
+      <!-- 头像选择区 -->
+      <view class="avatar-edit-section">
+        <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+          <view class="avatar-container">
+            <image class="edit-avatar" src="{{editUserInfo.avatarUrl}}" mode="aspectFill"></image>
+            <view class="avatar-edit-badge">
+              <text class="badge-text">更换</text>
+            </view>
+          </view>
+        </button>
+      </view>
+      
+      <!-- 昵称输入区 -->
+      <view class="form-item">
+        <view class="form-label">昵称</view>
+        <input type="nickname" class="form-input" 
+               placeholder="请输入您的昵称" 
+               maxlength="32"
+               value="{{editUserInfo.nickname}}"
+               bindinput="onNicknameInput" />
+        <view class="input-counter" wx:if="{{editUserInfo.nickname.length > 0}}">
+          {{editUserInfo.nickname.length}}/32
+        </view>
+      </view>
+      
+      <!-- 健康目标选择区 -->
+      <view class="form-item">
+        <view class="form-label">健康目标</view>
+        <picker mode="selector" range="{{healthGoalOptions}}" value="{{healthGoalIndex}}" bindchange="onHealthGoalChange">
+          <view class="form-input picker">
+            {{editUserInfo.healthGoal || '请选择健康目标'}}
+            <text class="picker-arrow">▼</text>
+          </view>
+        </picker>
+      </view>
+      
+      <!-- 保存按钮 -->
+      <view class="form-actions">
+        <button class="cancel-btn" bindtap="closeEditUserInfo">取消</button>
+        <button class="save-btn {{canSave ? '' : 'disabled'}}" 
+                bindtap="saveUserInfo" 
+                disabled="{{!canSave}}">保存</button>
+      </view>
+    </view>
+  </view>
+</view>

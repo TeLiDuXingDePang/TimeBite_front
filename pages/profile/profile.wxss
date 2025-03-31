@@ -1,0 +1,420 @@
+/**profile.wxss**/
+page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f8f8f8;
+}
+.scrollarea {
+  flex: 1;
+  overflow-y: hidden;
+}
+
+.profile-container {
+  padding: 20rpx 30rpx;
+  box-sizing: border-box;
+}
+
+/* 用户卡片样式 */
+.user-card {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+  margin-bottom: 30rpx;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+  position: relative;
+}
+
+.avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  margin-right: 20rpx;
+}
+
+.user-details {
+  flex: 1;
+}
+
+.username {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.health-goal {
+  font-size: 26rpx;
+  color: #4caf50;
+  background-color: rgba(76, 175, 80, 0.1);
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+  display: inline-block;
+}
+
+/* 编辑按钮 */
+.edit-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: rgba(76, 175, 80, 0.1);
+}
+
+.edit-icon {
+  font-size: 32rpx;
+}
+
+.quick-actions {
+  display: flex;
+  justify-content: space-around;
+  border-top: 1rpx solid #f0f0f0;
+  padding-top: 20rpx;
+}
+
+.action-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10rpx 0;
+}
+
+.action-icon {
+  width: 58rpx;
+  height: 58rpx;
+  margin-bottom: 8rpx;
+}
+
+.action-item text {
+  font-size: 26rpx;
+  color: #666;
+}
+
+/* 功能列表样式 */
+.function-list {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 0 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+  font-size: 28rpx;
+  color: #999;
+  padding: 30rpx 10rpx 20rpx;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  padding: 30rpx 10rpx;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+.item-icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 20rpx;
+}
+
+.item-text {
+  flex: 1;
+  font-size: 30rpx;
+  color: #333;
+}
+
+.item-value {
+  font-size: 28rpx;
+  color: #999;
+  margin-right: 20rpx;
+}
+
+.item-value.premium {
+  color: #ff9800;
+}
+
+.arrow-icon {
+  width: 32rpx;
+  height: 32rpx;
+  opacity: 0.6;
+}
+
+/* 保质期提醒时间选择器模态框样式 */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  width: 650rpx;
+  background-color: #fff;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 6rpx 20rpx rgba(0, 0, 0, 0.15);
+  transform: scale(0.95);
+  transition: transform 0.3s ease;
+}
+
+.modal.show .modal-content {
+  transform: scale(1);
+}
+
+.modal-header {
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.modal-close {
+  font-size: 40rpx;
+  color: #999;
+  line-height: 1;
+}
+
+.modal-body {
+  padding: 30rpx;
+}
+
+.modal-description {
+  font-size: 28rpx;
+  color: #666;
+  text-align: center;
+  margin-bottom: 30rpx;
+}
+
+.time-options {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  margin-bottom: 30rpx;
+}
+
+.time-option {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 20rpx;
+  border-radius: 12rpx;
+  background-color: #f9f9f9;
+  border: 2rpx solid transparent;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.time-option.active {
+  border-color: #4caf50;
+  background-color: rgba(76, 175, 80, 0.1);
+}
+
+.option-value {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-right: 20rpx;
+  width: 80rpx;
+}
+
+.option-desc {
+  flex: 1;
+  font-size: 28rpx;
+  color: #666;
+}
+
+.option-check {
+  position: absolute;
+  right: 20rpx;
+  width: 40rpx;
+  height: 40rpx;
+  background-color: #4caf50;
+  border-radius: 50%;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+}
+
+.tips-box {
+  display: flex;
+  align-items: flex-start;
+  background-color: #f0f8ff;
+  padding: 20rpx;
+  border-radius: 12rpx;
+}
+
+.tips-icon {
+  font-size: 32rpx;
+  margin-right: 10rpx;
+  margin-top: 2rpx;
+}
+
+.tips-text {
+  flex: 1;
+  font-size: 24rpx;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* 用户信息编辑模态框样式 */
+.user-info-edit {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.avatar-edit-section {
+  margin: 20rpx 0 40rpx;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.avatar-wrapper {
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  height: auto;
+  line-height: normal;
+  display: flex;
+  justify-content: center;
+}
+
+.avatar-wrapper::after {
+  border: none;
+}
+
+.avatar-container {
+  position: relative;
+  width: 150rpx;
+  height: 150rpx;
+}
+
+.edit-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2rpx solid #eee;
+}
+
+.avatar-edit-badge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: #4caf50;
+  color: white;
+  font-size: 20rpx;
+  padding: 6rpx 10rpx;
+  border-radius: 8rpx;
+}
+
+.form-item {
+  margin-bottom: 30rpx;
+  position: relative;
+}
+
+.form-label {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 10rpx;
+}
+
+.form-input {
+  width: 100%;
+  height: 80rpx;
+  border: 1rpx solid #ddd;
+  border-radius: 8rpx;
+  padding: 0 20rpx;
+  font-size: 28rpx;
+  color: #333;
+  box-sizing: border-box;
+}
+
+.form-input.picker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.picker-arrow {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.input-counter {
+  position: absolute;
+  right: 10rpx;
+  bottom: -24rpx;
+  font-size: 22rpx;
+  color: #999;
+}
+
+.form-actions {
+  margin-top: 40rpx;
+  display: flex;
+  justify-content: space-between;
+}
+
+.cancel-btn, .save-btn {
+  width: 46%;
+  height: 80rpx;
+  border-radius: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+}
+
+.cancel-btn {
+  background-color: #f5f5f5;
+  color: #666;
+}
+
+.save-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.save-btn.disabled {
+  background-color: #ccc;
+  color: #fff;
+}
